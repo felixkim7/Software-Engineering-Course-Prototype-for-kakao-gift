@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(./**)",
+      "Edit(./prototype/**)",
+      "Edit(./docs/**)",
+      "Edit(./README.md)",
+      "Bash(npx serve:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}

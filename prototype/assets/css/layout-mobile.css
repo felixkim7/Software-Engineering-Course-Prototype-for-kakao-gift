@@ -1,0 +1,31 @@
+/* Phone frame for buyer / recipient screens. The frame disappears on real phones (≤ 480px). */
+body.mobile {
+  min-height: 100vh; display: grid; place-items: center; padding: var(--sp-6) 0;
+  background: var(--color-bg-grey);
+}
+.phone {
+  position: relative; display: flex; flex-direction: column; overflow: hidden;
+  width: var(--phone-width); height: var(--phone-height);
+  background: var(--color-bg); border-radius: var(--radius-phone);
+  box-shadow: var(--shadow-phone);
+}
+.phone__body { position: relative; flex: 1; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+.phone__body::-webkit-scrollbar { display: none; }
+
+@media (max-width: 480px) {
+  body.mobile { padding: 0; display: block; }
+  .phone { width: 100%; height: 100dvh; border-radius: 0; box-shadow: none; }
+}
+
+/* Fake Android status bar */
+.statusbar {
+  flex: none; height: var(--statusbar-h); padding: 0 var(--sp-5);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: var(--fs-15); color: var(--color-ink-2); background: var(--color-bg);
+}
+.statusbar__right { display: flex; align-items: center; gap: var(--sp-1); }
+
+/* Sticky chrome inside the scrolling body */
+.sticky-top { position: sticky; top: 0; z-index: 10; background: var(--color-bg); }
+.sticky-bottom { position: sticky; bottom: 0; z-index: 10; }
+.page-bg-grey { background: var(--color-bg-grey); min-height: 100%; }

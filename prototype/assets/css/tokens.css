@@ -1,0 +1,101 @@
+/* Design tokens. Values come from docs/visual-spec.md (measured from docs/reference-screens/).
+   This is the only file allowed to contain raw color values. */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
+:root {
+  /* Color — core */
+  --color-accent: #FEE500;
+  --color-accent-strong: #FFEB00;
+  --color-accent-ink: #191919;
+  --color-ink: #191919;
+  --color-ink-strong: #000000;
+  --color-ink-2: #424242;
+  --color-ink-body: #303030;
+  --color-ink-3: #767676;
+  --color-ink-4: #949494;
+  --color-ink-5: #CCCCCC;
+  --color-on-dark: #FFFFFF;
+  --color-line: #EDEDED;
+  --color-line-strong: #DADADA;
+  --color-surface: #FFFFFF;
+  --color-bg: #FFFFFF;
+  --color-bg-soft: #FAFAFA;
+  --color-bg-grey: #F5F5F5;
+  --color-section-gap: #EDEDED;
+  --color-tag-bg: #F0F0F0;
+  --color-tag-ink: #595959;
+
+  /* Color — accents */
+  --color-sale: #F2473A;
+  --color-sale-strong: #F6432F;
+  --color-pink: #F46068;
+  --color-orange: #EA7122;
+  --color-blue: #4684EB;
+  --color-blue-soft: #E5F1FF;
+  --color-blue-soft-line: #D6E6FA;
+  --color-blue-pale: #E8F0FC;
+  --color-blue-muted: #7DA4DF;
+  --color-link: #206FBE;
+  --color-point: #1A73D9;
+  --color-info-bg: #F2F6FF;
+  --color-info-line: #C9D9F5;
+  --color-info-bg-2: #F8F9FB;
+  --color-qty-bg: #F7FBFE;
+  --color-promo-bg: #FFF0DD;
+  --color-banner-teal: #238A86;
+  --color-banner-teal-dark: #1C6E6A;
+  --color-message-blue: #75A9FC;
+  --color-badge-exclusive-bg: #000000;
+  --color-badge-exclusive-ink: #FFE400;
+  --color-badge-hot-bg: #FFF600;
+  --color-badge-hot-ink: #3E1B08;
+  --color-card-brown: #7E7266;
+  --color-card-blue: #0A6BC0;
+  --color-avatar: #7FCDE1;
+  --color-dark-panel: #222222;
+  --color-dim: rgba(0, 0, 0, .4);
+  --color-counter-bg: rgba(0, 0, 0, .4);
+  --color-toast-bg: rgba(0, 0, 0, .8);
+
+  /* Color — To-Be only (no screenshot; chosen to fit the palette) */
+  --color-positive: #1E9E62;
+  --color-warning: #E08A00;
+  --color-danger: var(--color-sale);
+  --color-info: var(--color-blue);
+  --color-money: var(--color-blue);
+  --color-new: var(--color-sale-strong);
+
+  /* Type */
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  --fs-10: 10px; --fs-11: 11px; --fs-12: 12px; --fs-13: 13px; --fs-14: 14px; --fs-15: 15px;
+  --fs-16: 16px; --fs-17: 17px; --fs-18: 18px; --fs-20: 20px; --fs-22: 22px; --fs-24: 24px; --fs-30: 30px;
+  --fw-regular: 400; --fw-medium: 500; --fw-bold: 700;
+  --lh-tight: 1.25; --lh-body: 1.4; --lh-loose: 1.55;
+
+  /* Space (4px scale) */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-7: 28px;
+  --sp-8: 32px; --sp-10: 40px;
+  --page-x: 16px;       /* side padding */
+  --grid-gap: 8px;
+  --band-h: 8px;        /* grey band between sections */
+
+  /* Shape & depth */
+  --radius-xs: 3px; --radius-s: 6px; --radius-m: 8px; --radius-l: 12px; --radius-xl: 16px;
+  --radius-squircle: 18px; --radius-pill: 999px;
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, .08);
+  --shadow-sheet: 0 -4px 20px rgba(0, 0, 0, .12);
+  --shadow-notice: 0 4px 16px rgba(0, 0, 0, .15);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, .06);
+  --shadow-phone: 0 0 0 10px #191919, 0 20px 50px rgba(0, 0, 0, .25);
+  --color-veil: rgba(255, 255, 255, .5);
+  --radius-phone: 36px;
+
+  /* Layout */
+  --phone-width: 390px; --phone-height: 844px;
+  --statusbar-h: 27px; --header-h: 40px; --gnb-h: 47px;
+  --bottom-cta-h: 64px; --tabbar-h: 58px;
+  --btn-h: 48px; --btn-h-s: 36px; --btn-h-dialog: 38px;
+  --icon: 24px; --icon-s: 18px;
+  --tile: 48px; --circle: 44px; --thumb: 70px;
+  --dialog-w: 280px;
+}

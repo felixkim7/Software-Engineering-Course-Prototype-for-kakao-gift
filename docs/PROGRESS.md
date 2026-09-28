@@ -1,0 +1,87 @@
+# Progress Tracker
+
+Claude Code: update this file at the end of every phase (and whenever a decision is made).
+Keep entries short. Newest notes at the top of each section.
+
+## Current phase
+
+**Phase 2 — Buyer checkout** (next; Phase 1 done 2026-09-28)
+
+## Phase checklist
+
+- [x] Phase 0 — Foundation (scaffold, design system, store, mock services, demo hub)
+- [x] Phase 1 — Buyer: recipient selection & segmented recommendation
+- [ ] Phase 2 — Buyer: checkout, payment, send, history
+- [ ] Phase 3 — Recipient: inbox, gift view, delivery receipt
+- [ ] Phase 4 — Recipient: decline / convert to cash ★
+- [ ] Phase 5 — Seller center: integrated order + delivery, Excel, tracking upload
+- [ ] Phase 6 — Integration, polish, demo readiness
+
+## Phase log
+
+<!-- Template — copy for each finished phase
+### Phase N — <name> (done YYYY-MM-DD)
+- Built: <pages / modules>
+- Acceptance criteria: all passed | exceptions: …
+- Notes: …
+-->
+
+### Phase 1 — Buyer discovery (done 2026-09-28)
+- Built: `buyer/index.html` + `pages/buyer-home.js` (SCR-B01 friend picker, SCR-B02 segmented recommendation),
+  `buyer/product.html` + `pages/buyer-product.js` (SCR-B03), `ui/friends.js`, `css/buyer.css`, `core/recommend.js`
+  (pure scoring), `buyer/checkout.html` placeholder for Phase 2.
+- Acceptance criteria: all passed (headless Chrome script + `node tools/check-core.mjs`): friend → chips pre-filled
+  (u1: 친구/생일/20대/여성, 12 results); banner differs for u1 birthday / u2 coworker / u3 family / u6 partner; chip
+  click re-renders in ~2 ms; 친구·응원·50대+·남성 → 0 results + empty state, 필터 초기화 → 32; DOM scan of all buyer pages
+  finds no birthDate / date / age strings; browse mode has no recipient card and neutral chips; p07 shows
+  "금액전환·거절 가능 NEW", p11 shows the muted note; `?to=` `?id=` and chip params survive reload; 390 px + frame OK;
+  no console errors.
+- Visual check: B03 compared side by side with 164618 (see Decisions for deliberate differences).
+
+### Phase 0 — Foundation (done 2026-09-28)
+- Built: `docs/visual-spec.md` (all 12 screenshots, measured colors/sizes), `tokens.css` + base/components/overlays/layout CSS,
+  core (store, seed-data, state-machine, format, strings, recommend), mock services (payment, messaging, delivery, export stub),
+  UI (components, overlays, icons, data-table, gallery), demo hub, 3 placeholder pages, 80 images cropped by `tools/crop-screens.py`.
+- Acceptance criteria: all passed. Verified in headless Chrome via DevTools (no console errors on hub/buyer/recipient/seller;
+  illegal transition throws `IllegalTransitionError`; `failNextPayment` fails once then resets; same idempotency key → same txId;
+  modal traps focus + ESC closes; toast region `aria-live="polite"`; state survives reload; reset restores seed) and by
+  `node tools/check-core.mjs`. Grep: no raw colors outside `tokens.css`.
+- Visual check: buyer header + GNB compared side by side with 164501 at 411 px → fixed status bar (27 px / 15 px text),
+  header height (40 px), tab spacing (20 px), promo label colors (pink / orange).
+- Notes: screen-specific pieces (friend picker, audience circles, pay cards, order group) are left to the phase that builds that screen.
+
+## Decisions & assumptions
+
+- (Phase 1) Recommendation threshold: a product is recommended when its tag points ≥ 8 of 9 (관계 3 + 상황 3 + 연령대 2 must fit; 성별 +1 is a bonus). With ≥ 6 almost the whole catalog matched and the empty state was unreachable. Unselected group = match, so neutral chips show all 32.
+- (Phase 1) Chip pre-fill: 관계/연령대/성별 from derived tags; 상황 = 생일 only when the birthday is within 7 days, otherwise none. Tapping an active chip clears that group; 성별 has an explicit "전체".
+- (Phase 1) Dynamic banner copy follows the 상황 chip first, then 관계; birthday uses the given name ("지우님 생일이 3일 남았어요 🎂", chip "생일 선물 BEST").
+- (Phase 1) B01 keeps the real home below the friend band (선물 테마 / 카테고리 / 최근 본 tiles + 실시간 선물랭킹); tiles open browse mode with the matching chip or category pre-selected.
+- (Phase 1) B03 deliberate differences from 164618: no 쿠폰받기 pill and no "나에게 선물 시 … 저렴해요" box (out of scope) — replaced by the To-Be convert/decline info box; no 나에게 button; hero image is a tighter crop (baked-in badges removed).
+- (Phase 1) Browse mode (no recipient): B03's 선물하기 opens a friend-picker bottom sheet, then goes to checkout.
+- (Phase 1) Header ✕ returns to the demo hub; search/cart icons show a "데모에서는 지원하지 않는 기능이에요" toast.
+- (Phase 0, user) Kakao logo / Kakao Friends characters are used as images cropped from the screenshots — no text-wordmark substitute. The app header stays bold text "선물하기" because that is what the screenshots show.
+- (Phase 0, user) External CDN resources beyond SheetJS are allowed (Pretendard web font from jsdelivr). Icons are still inline SVG (Lucide-style paths) — no icon runtime needed.
+- (Phase 0, user) Mobile screens show a fake Android status bar (the screenshots are Android).
+- (Phase 0) Pixel ratio 2.625 (1080px → 411 CSS px) for converting screenshot measurements — see visual-spec.md §0.
+- (Phase 0) Seed dates are generated relative to "now" (u1's birthday is always D-3, deadlines always valid) so the demo works on any day.
+- (Phase 0) Seed uses the real brand names seen in the screenshots (하겐다즈, 고디바, BBQ …) to match the images. Seller s1 = 하겐다즈 공식스토어.
+- (Phase 0) Product fields added beyond data-model.md: `discountRate`, `benefitPrice` (최대혜택가), `badge` (단독/쨍특), `freeShipping`, `wishCount` — display only.
+- (Phase 0) `convertible: false` products: p11 파리바게뜨 (배달 주문 교환권), p25 정관장.
+- (Phase 0) The store reloads on the `storage` event, so hub / buyer / recipient tabs open side by side never overwrite each other.
+- (Phase 0) Order numbers keep the spec format `YYYYMMDD-NNNNNN` (the real app shows 10 digits; spec wins for data).
+- (Phase 0) Screenshot images are cropped by `tools/crop-screens.py` into `prototype/assets/img/`; add new crops there in later phases.
+- Convert-to-cash credits 100% of the paid amount to a generic in-app wallet ("페이머니"). (Assumption — no fee.)
+- Decision deadline for decline/convert = 30 days after sending. (Assumption.)
+- Decline/convert is not allowed after the recipient has submitted a delivery address or used a voucher. (From UC-R3 precondition "not yet used/received".)
+- UI copy is Korean; code and docs are English.
+- Visuals copy the real KakaoTalk Gift app from `docs/reference-screens/` (screenshot wins over spec for visuals). Images/logos are cut from screenshots.
+
+## Known issues
+
+_(none yet)_
+
+## Ideas / backlog (not in any phase — ask before building)
+
+- Buyer-initiated cancel/refund (Buyer goal 6).
+- Seller CS inbox (UC-S3).
+- Wishlist.

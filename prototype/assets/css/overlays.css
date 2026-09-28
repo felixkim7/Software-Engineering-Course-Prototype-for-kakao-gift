@@ -1,0 +1,40 @@
+/* Dialog, bottom sheet, toast, loading. Inside the phone frame they cover only the phone. */
+.overlay { position: fixed; inset: 0; z-index: 100; display: flex; background: var(--color-dim); animation: fade-in .15s ease-out; }
+.phone .overlay, .phone .toast-region { position: absolute; }
+.overlay--center { align-items: center; justify-content: center; padding: var(--sp-6); }
+.overlay--bottom { align-items: flex-end; }
+.overlay--loading { background: var(--color-veil); }
+.overlay.is-closing { animation: fade-in .2s reverse forwards; }
+
+/* Popup (164819): white box, left-aligned message, grey 아니오 + yellow 네 */
+.dialog { width: var(--dialog-w); max-width: 100%; padding: 28px var(--sp-6) var(--sp-6); border-radius: var(--radius-l); background: var(--color-surface); }
+.dialog__title { margin-bottom: var(--sp-2); font-size: var(--fs-17); font-weight: var(--fw-bold); }
+.dialog__msg { font-size: var(--fs-16); line-height: var(--lh-loose); }
+.dialog__actions { display: flex; gap: 6px; margin-top: var(--sp-6); }
+.dialog__actions .btn { flex: 1; height: var(--btn-h-dialog); }
+
+/* Bottom sheet (164632) */
+.sheet { position: relative; width: 100%; max-height: 85%; overflow-y: auto; padding: 26px var(--page-x) var(--sp-4); border-radius: var(--radius-xl) var(--radius-xl) 0 0; background: var(--color-surface); box-shadow: var(--shadow-sheet); animation: slide-up .22s ease-out; }
+.sheet:focus { outline: none; }
+.sheet__handle { position: absolute; top: 10px; left: calc(50% - 18px); width: 36px; height: 4px; border-radius: 2px; background: var(--color-ink-4); }
+.overlay.is-closing .sheet { animation: slide-up .2s reverse forwards; }
+
+/* Toasts */
+.toast-region { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
+.toast { position: absolute; left: 50%; transform: translateX(-50%); animation: toast-in .2s ease-out; }
+.toast.is-leaving { opacity: 0; transition: opacity .25s; }
+.toast--plain { bottom: 96px; max-width: calc(100% - 48px); padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-m); background: var(--color-toast-bg); color: var(--color-on-dark); font-size: var(--fs-14); text-align: center; }
+.toast--notice { top: 8px; width: calc(100% - 16px); display: flex; align-items: center; gap: var(--sp-2); padding: 6px var(--sp-4) 6px 6px; border-radius: var(--radius-pill); background: var(--color-surface); box-shadow: var(--shadow-notice); font-size: var(--fs-14); }
+.toast--notice b { flex: none; font-weight: var(--fw-bold); }
+.toast--notice span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--color-ink-2); }
+.toast__icon { width: 30px; height: 30px; border-radius: 50%; }
+
+/* Loading */
+.loading { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); padding: var(--sp-5) var(--sp-6); border-radius: var(--radius-l); background: var(--color-surface); box-shadow: var(--shadow-notice); font-size: var(--fs-14); color: var(--color-ink-2); }
+.spinner { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--color-line); border-top-color: var(--color-accent-ink); animation: spin .8s linear infinite; }
+
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes slide-up { from { transform: translateY(100%); } }
+@keyframes toast-in { from { opacity: 0; translate: 0 8px; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; } }
