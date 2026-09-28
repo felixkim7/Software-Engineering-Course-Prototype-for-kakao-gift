@@ -45,6 +45,13 @@
   --color-banner-teal: #238A86;
   --color-banner-teal-dark: #1C6E6A;
   --color-message-blue: #75A9FC;
+  /* message card themes (sampled from the 164646 theme strip) */
+  --color-theme-pink: #FCEFF3;
+  --color-theme-yellow: #FCE4A8;
+  --color-theme-sky: #66B4FC;
+  --color-theme-grey: #E9E9E9;
+  --color-danger-bg: #FDECEA;
+  --color-warning-bg: #FFF4E0;
   --color-badge-exclusive-bg: #000000;
   --color-badge-exclusive-ink: #FFE400;
   --color-badge-hot-bg: #FFF600;
@@ -86,6 +93,7 @@
   --shadow-sheet: 0 -4px 20px rgba(0, 0, 0, .12);
   --shadow-notice: 0 4px 16px rgba(0, 0, 0, .15);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, .06);
+  --shadow-text: 0 1px 3px rgba(0, 0, 0, .25);
   --shadow-phone: 0 0 0 10px #191919, 0 20px 50px rgba(0, 0, 0, .25);
   --color-veil: rgba(255, 255, 255, .5);
   --radius-phone: 36px;

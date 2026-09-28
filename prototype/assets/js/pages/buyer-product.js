@@ -1,10 +1,10 @@
 // SCR-B03 Product detail — UC-B2 step 4. buyer/product.html?id=p07&to=u1&situation=birthday
 // Layout follows reference 164618. To-Be: 금액전환·거절 가능 badge (NEW) / muted note when not convertible.
 import { escapeHtml, formatKRW } from "../core/format.js";
-import { CATEGORY_LABELS } from "../core/strings.js";
+import { BUYER_STEPS, CATEGORY_LABELS } from "../core/strings.js";
 import { getProduct, getState, getUser, listProducts } from "../core/store.js";
 import {
-  AppHeader, BottomCTA, EmptyState, InfoBox, NewBadge, ProductGrid, SectionHeader, Tag, Thumb, UnderlineTabs, initPage, selectOne,
+  AppHeader, BottomCTA, EmptyState, InfoBox, NewBadge, ProductGrid, SectionHeader, Stepper, Tag, Thumb, UnderlineTabs, initPage, selectOne,
 } from "../ui/components.js";
 import { FriendCards, sortFriends } from "../ui/friends.js";
 import { icon } from "../ui/icons.js";
@@ -93,6 +93,7 @@ function render() {
 
   app.innerHTML = `
     <div class="sticky-top">${AppHeader()}</div>
+    ${Stepper(BUYER_STEPS, 1)}
     <div class="detail-hero">${Thumb(p.thumbnail, p.name)}${p.badge ? `<span class="promo-badge promo-badge--${p.badge === "단독" ? "exclusive" : "hot"}">${p.badge}</span>` : ""}
       <span class="banner__counter" aria-hidden="true">1/1</span></div>
     <section class="detail-body">

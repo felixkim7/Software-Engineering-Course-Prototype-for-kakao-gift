@@ -216,7 +216,7 @@ export function createSeed(now = new Date()) {
     gifts,
     notifications: [
       { id: "n1", userId: "u0", giftId: declined.id, type: "DECLINED_REFUNDED", read: false, at: declined.settlement.at,
-        text: "정우진님이 선물을 거절했어요. 결제 금액이 환불되었습니다." },
+        text: `우진님이 선물을 거절하여 ${declined.amount.toLocaleString("ko-KR")}원이 환불되었어요.` },
     ],
     wallets: [
       { userId: "u1", balance: 0, ledger: [] },

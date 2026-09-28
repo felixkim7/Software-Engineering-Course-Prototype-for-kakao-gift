@@ -22,6 +22,9 @@ export function formatDate(iso, { time = false } = {}) {
   return time ? `${date} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}` : date;
 }
 
+/** "김지우" → "지우" (friends are called by their given name); other lengths unchanged. */
+export const givenName = (name) => (String(name).length === 3 ? String(name).slice(1) : String(name));
+
 /** "010-1234-5678" → "010-****-5678" */
 export function maskPhone(phone) {
   return String(phone).replace(/^(\d{3})-?\d{3,4}-?(\d{4})$/, "$1-****-$2");

@@ -66,6 +66,22 @@ assert.equal((await pay({ amount: 9000, method: "card", idempotencyKey: "k2" }))
 store.setDevFlag("failNextSettlement", true);
 assert.equal((await convertToCash({ giftId: "g1001", userId: "u1", amount: 32900, idempotencyKey: "c1" })).ok, false);
 
+// Checkout reliability (Phase 2): one gift per payment txId, notifications marked read, message resend
+const { sendGiftMessage, resendGiftMessage } = await import(`${js}/services/messaging-service.js`);
+const before = store.getState().gifts.length;
+const g1 = store.createGift({ buyerId: "u0", recipientId: "u1", productId: "p20", amount: 13500, paymentTxId: "tx_same" });
+const g2 = store.createGift({ buyerId: "u0", recipientId: "u1", productId: "p20", amount: 13500, paymentTxId: "tx_same" });
+assert.equal(g1.id, g2.id);
+assert.equal(store.getState().gifts.length, before + 1);
+assert.equal(g1.status, "SENT");
+store.markNotificationsRead("u0");
+assert.ok(store.listNotifications("u0").every((n) => n.read));
+store.setDevFlag("failNextMessage", true);
+assert.equal((await sendGiftMessage({ giftId: g1.id })).code, "MESSAGE_FAILED");
+store.updateGift(g1.id, { messageFailed: true });
+assert.equal((await resendGiftMessage({ giftId: g1.id })).ok, true);
+assert.equal(store.getGift(g1.id).messageFailed, false);
+
 // Delivery: validation + ship
 assert.equal((await registerTracking({ giftId: "g2001", courier: "CJ대한통운", trackingNo: "12ab" })).code, "INVALID_TRACKING_NO");
 assert.equal((await registerTracking({ giftId: "g2001", courier: "CJ대한통운", trackingNo: "681234567890" })).ok, true);

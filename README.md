@@ -10,7 +10,8 @@ Team Assignment 1 ("재구축 서비스 정의"). Built with vanilla HTML, CSS a
 3. Right-click `prototype/index.html` → **Open with Live Server**.
    *(Alternative: `npx serve prototype` and open the printed URL.)*
 
-ES modules don't work from `file://`, so always use a local server.
+ES modules don't work from `file://`, so always use a local server. After pulling new code, hard-refresh
+(Ctrl+Shift+R) so the browser doesn't keep old modules.
 
 The demo hub (`prototype/index.html`) has role cards, **데모 데이터 초기화** (reset), failure toggles
 for the alternate flows, and a component gallery (`prototype/index.html#gallery` opens it directly).

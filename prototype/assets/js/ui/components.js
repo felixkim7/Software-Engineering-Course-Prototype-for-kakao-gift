@@ -195,16 +195,30 @@ export function OptionCompare(options, selected = null) {
     </button>`).join("")}</div>`;
 }
 
-/** Checkout / received-gift message card (blue theme from the checkout screenshot). */
-export function GiftMessageCard({ message, editable = false }) {
-  return `<figure class="msg-card">
-    <blockquote class="msg-card__text">${escapeHtml(message).replaceAll("\n", "<br>")}</blockquote>
+/** Message card themes (164646 theme strip). `full`: the art fills the card width, as in the real blue card. */
+export const MESSAGE_THEMES = {
+  birthday: { label: "생일", thumb: "msg-theme-1", art: "msg-theme-1", bg: "var(--color-theme-pink)", dark: false, text: "생일 축하해! 🎉\n행복한 하루 보내" },
+  thanks: { label: "감사", thumb: "msg-theme-3", art: "msg-theme-3", bg: "var(--color-theme-sky)", dark: true, text: "늘 고마워요\n작은 마음을 전해요" },
+  congrats: { label: "축하", thumb: "msg-theme-4", art: "msg-art-blue", bg: "var(--color-message-blue)", dark: true, full: true, text: "사랑 듬뿍 받고\n건강하고 행복하길!" },
+  cheer: { label: "응원", thumb: "msg-theme-2", art: "msg-theme-2", bg: "var(--color-theme-yellow)", dark: false, text: "힘내! 늘 응원하고 있어 💪" },
+  basic: { label: "기본", thumb: "msg-theme-5", art: "msg-theme-5", bg: "var(--color-theme-grey)", dark: false, text: "마음을 담아\n선물을 보내요 🎁" },
+};
+/** 상황 chip from Phase 1 → card theme */
+export const THEME_FOR_SITUATION = { birthday: "birthday", thanks: "thanks", congrats: "congrats", cheer: "cheer", getwell: "cheer", casual: "basic" };
+
+/** Checkout / received-gift message card. The message is user text → always escaped. */
+export function GiftMessageCard({ message, theme = "basic", editable = false }) {
+  const t = MESSAGE_THEMES[theme] ?? MESSAGE_THEMES.basic;
+  const text = String(message ?? "").trim() || t.text;
+  return `<figure class="msg-card ${t.dark ? "msg-card--dark" : ""} ${t.full ? "msg-card--full" : ""}" style="--card-bg: ${t.bg}">
+    <blockquote class="msg-card__text" data-card-text>${escapeHtml(text)}</blockquote>
     ${editable ? `<button class="msg-card__edit" type="button" data-action="edit-message">${icon("text", { size: 18 })}메시지 편집</button>` : ""}
-    <img class="msg-card__art" src="${imgSrc("msg-art-blue")}" alt=""></figure>`;
+    <img class="msg-card__art" src="${imgSrc(t.art)}" alt=""></figure>`;
 }
 
+/** tone: "blue" | "peach" | "danger" (announced as an alert) | "warning" */
 export function InfoBox(text, { tone = "blue", iconName = "info" } = {}) {
-  return `<p class="info-box info-box--${tone}">${icon(iconName, { size: 18 })}<span>${escapeHtml(text)}</span></p>`;
+  return `<p class="info-box info-box--${tone}" ${tone === "danger" ? 'role="alert"' : ""}>${icon(iconName, { size: 18 })}<span>${escapeHtml(text)}</span></p>`;
 }
 
 /** actionName → a <button data-action>; otherwise actionHref → a link. */

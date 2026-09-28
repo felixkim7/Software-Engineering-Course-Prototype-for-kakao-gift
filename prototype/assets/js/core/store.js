@@ -3,7 +3,7 @@
 import { createSeed, orderNo } from "./seed-data.js";
 
 const KEY = "giftProto.v1";
-const VERSION = 2; // bump whenever seed-data changes so browsers reseed
+const VERSION = 3; // bump whenever seed-data changes so browsers reseed
 const CHANGE_EVENT = "store:change";
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -82,8 +82,13 @@ export function setCurrentUser(userId) {
   save({ type: "session", userId });
 }
 
-/** Create a gift in status SENT. `data` needs buyerId, recipientId, productId, amount; the rest is optional. */
+/**
+ * Create a gift in status SENT. `data` needs buyerId, recipientId, productId, amount; the rest is optional.
+ * Idempotent per payment: a second call with the same `paymentTxId` returns the existing gift (no duplicate order).
+ */
 export function createGift(data) {
+  const existing = data.paymentTxId && state.gifts.find((g) => g.paymentTxId === data.paymentTxId);
+  if (existing) return existing;
   const now = new Date();
   const seq = state.nextSeq++;
   const deadline = new Date(now.getTime() + 30 * DAY);
@@ -124,6 +129,13 @@ export function addNotification({ userId, giftId, type, text }) {
   state.notifications.push(n);
   save({ type: "notification", userId });
   return n;
+}
+
+export function markNotificationsRead(userId) {
+  const unread = state.notifications.filter((n) => n.userId === userId && !n.read);
+  if (!unread.length) return;
+  unread.forEach((n) => (n.read = true));
+  save({ type: "notification:read", userId });
 }
 
 export function creditWallet(userId, amount, giftId, reason) {

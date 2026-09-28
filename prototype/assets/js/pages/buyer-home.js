@@ -1,6 +1,7 @@
 // SCR-B01 (choose recipient) + SCR-B02 (segmented recommendation) — UC-B1, UC-B2 steps 1–4, alt 3a / 3b.
 // State A: buyer/index.html · State B: ?to=u1 (recipient) or ?browse=1 (no recipient). Chips live in the URL.
-import { AGE_LABELS, CATEGORY_LABELS, GENDER_LABELS, RELATION_LABELS, SITUATION_LABELS } from "../core/strings.js";
+import { AGE_LABELS, BUYER_STEPS, CATEGORY_LABELS, GENDER_LABELS, RELATION_LABELS, SITUATION_LABELS } from "../core/strings.js";
+import { givenName } from "../core/format.js";
 import { getState, getUser, listProducts } from "../core/store.js";
 import { EMPTY_FILTERS, deriveProfileTags, filtersFromTags, popularInSegment, recommend } from "../core/recommend.js";
 import {
@@ -11,7 +12,6 @@ import { FriendCards, RecipientCard, sortFriends } from "../ui/friends.js";
 import { icon } from "../ui/icons.js";
 
 const S = {
-  steps: ["받는 사람", "선물 고르기", "메시지·결제", "완료"],
   pickTitle: "선물할 친구를 선택해 주세요.",
   search: "친구 이름 검색",
   noFriend: "검색 결과가 없어요.",
@@ -104,14 +104,14 @@ function renderPick() {
   const ranking = [...products].sort((a, b) => b.popularity - a.popularity).slice(0, 6);
   app.innerHTML = `
     <div class="sticky-top">${AppHeader()}${TopTabs()}</div>
-    ${Stepper(S.steps, 0)}
+    ${Stepper(BUYER_STEPS, 0)}
     <section class="friend-band" aria-labelledby="pick-h">
       <div class="pick-card"><h2 class="pick-card__title" id="pick-h"><span class="plus-tile">${icon("plus", { strokeWidth: 2 })}</span>${S.pickTitle}</h2>
         <label class="searchbar">${icon("search", { size: 20 })}<span class="visually-hidden">${S.search}</span><input type="search" data-friend-search placeholder="${S.search}"></label></div>
       ${FriendCards(friends, (u) => `?to=${u.id}`)}
       <p class="friend-empty" data-friend-empty hidden>${S.noFriend}</p>
       <div class="friend-links"><a class="link-more" href="?browse=1">${S.browse}${icon("chevronRight", { size: 16 })}</a>
-        <button class="link-muted" type="button" disabled title="Phase 2">${S.history}</button></div>
+        <a class="link-more link-more--muted" href="history.html">${S.history}${icon("chevronRight", { size: 16 })}</a></div>
     </section>
     <section class="home-section">
       ${Segmented({ label: "선물 둘러보기", active: "theme", options: [{ value: "theme", label: "선물 테마" }, { value: "category", label: "카테고리" }, { value: "recent", label: "최근 본" }] })}
@@ -145,7 +145,7 @@ function filterFriends(query) {
 function renderRecommend() {
   app.innerHTML = `
     <div class="sticky-top">${AppHeader()}${TopTabs()}</div>
-    ${Stepper(S.steps, 1)}
+    ${Stepper(BUYER_STEPS, 1)}
     ${recipient ? `<div class="friend-band">${RecipientCard(recipient, tags, "index.html")}</div>` : ""}
     <div data-banner></div>
     <section class="filter-block" aria-labelledby="filter-h">
@@ -170,9 +170,8 @@ function bannerFor(list) {
   let chip = SITUATION_LABELS[situation] ?? RELATION_LABELS[relation] ?? "추천";
   if (situation === "birthday") {
     chip = "생일 선물 BEST";
-    const givenName = recipient?.name.slice(1); // "김지우" → "지우"
     title = tags?.upcomingBirthday
-      ? `${givenName}님 생일이\n${tags.birthdayInDays === 0 ? "바로 오늘이에요" : `${tags.birthdayInDays}일 남았어요`} 🎂`
+      ? `${givenName(recipient.name)}님 생일이\n${tags.birthdayInDays === 0 ? "바로 오늘이에요" : `${tags.birthdayInDays}일 남았어요`} 🎂`
       : "특별한 날을 위한\n생일 선물 모음";
   }
   return {

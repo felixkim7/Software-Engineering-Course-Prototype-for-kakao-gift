@@ -5,13 +5,13 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Current phase
 
-**Phase 2 — Buyer checkout** (next; Phase 1 done 2026-09-28)
+**Phase 3 — Recipient receive** (next; Phase 2 done 2026-09-29)
 
 ## Phase checklist
 
 - [x] Phase 0 — Foundation (scaffold, design system, store, mock services, demo hub)
 - [x] Phase 1 — Buyer: recipient selection & segmented recommendation
-- [ ] Phase 2 — Buyer: checkout, payment, send, history
+- [x] Phase 2 — Buyer: checkout, payment, send, history
 - [ ] Phase 3 — Recipient: inbox, gift view, delivery receipt
 - [ ] Phase 4 — Recipient: decline / convert to cash ★
 - [ ] Phase 5 — Seller center: integrated order + delivery, Excel, tracking upload
@@ -25,6 +25,19 @@ Keep entries short. Newest notes at the top of each section.
 - Acceptance criteria: all passed | exceptions: …
 - Notes: …
 -->
+
+### Phase 2 — Buyer checkout (done 2026-09-29)
+- Built: `buyer/checkout.html` + `pages/buyer-checkout.js` (SCR-B04, layout per 164646), `buyer/complete.html` +
+  `pages/buyer-complete.js` (SCR-B05), `buyer/history.html` + `pages/buyer-history.js` (SCR-B06, cards per 164809),
+  message-card themes in `GiftMessageCard`, `resendGiftMessage()`, `markNotificationsRead()`, idempotent `createGift`,
+  placeholder `recipient/gift.html` for the B05 demo link (Phase 3).
+- Acceptance criteria: all passed (headless Chrome script + `node tools/check-core.mjs`): B01→B05 flow creates exactly
+  one SENT gift (3 rapid clicks → 1 gift; deadline = 30 days, end of day); `failNextPayment` → error panel + toast, 0 gifts,
+  flag reset, retry succeeds; `failNextMessage` → gift saved with `messageFailed`, warning on B05, 다시 보내기 clears it;
+  `<b>hi</b>` renders literally on the card and on B05; history tabs 전체/진행 중/완료/거절·환불 work, CONVERTED shows
+  "전달 완료" (no conversion wording anywhere, CONVERTED step removed from the buyer timeline), DECLINED shows
+  "거절됨 · 환불 완료"; refund notice shown then marked read; stepper = 받는 사람 / 선물 고르기 (B02, B03) / 메시지·결제 /
+  완료; 390 px + frame OK; no console errors.
 
 ### Phase 1 — Buyer discovery (done 2026-09-28)
 - Built: `buyer/index.html` + `pages/buyer-home.js` (SCR-B01 friend picker, SCR-B02 segmented recommendation),
@@ -52,6 +65,10 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Decisions & assumptions
 
+- (Phase 2) Message card themes 생일/감사/축하/응원/기본 use the 5 Kakao theme thumbnails from 164646; 축하 is the real blue card with its full illustration. The theme follows the 상황 chip (쾌유 → 응원, 그냥 → 기본); switching themes replaces the default text until the buyer types.
+- (Phase 2) Payment idempotency key = one per checkout visit (a retry after failure reuses it); `createGift` is idempotent per `paymentTxId`; success uses `location.replace` so Back never reopens a paid checkout.
+- (Phase 2) Checkout keeps the real 선물 배송지 입력 section for delivery items with only "선물 받는 친구가 입력할 거예요" enabled (recipient enters the address in Phase 3). 쇼핑포인트 / 현금영수증 / card list from 164646 are out of scope.
+- (Phase 2) History tab mapping: 진행 중 = SENT/OPENED/ADDRESS_SUBMITTED/SHIPPED, 완료 = DELIVERED/USED/CONVERTED, 거절/환불 = DECLINED_REFUNDED. Buyer pages always act as u0.
 - (Post-Phase 1, user) Age-fitting catalog: replaced the fictional-brand products with real 선물하기 listings (name, price, image from gift.kakao.com, downloaded by `tools/fetch-web-images.py`): 50대+/부모님 → 정관장 에브리타임 레귤러 67,000 · 정관장 에브리타임 리미티드 보자기 144,000 · 신세계푸드 한우 1++ 구이 선물세트 159,000 · 락토핏 50대+ 22,900; 10대/20대 → 춘식이 드레스업 인형 26,000 · 산리오 쿠로미 인형 27,900 · 빙글빙글 피카츄 23,000 · 올리브영 기프트카드 3만원권. 스타벅스 now has a real image (9,000원). New category `character` (캐릭터·굿즈) — the home's 팬덤·캐릭터 tile opens it. 하겐다즈 리얼블랑 / 투썸 narrowed from all ages to 20–40대 so age-specific gifts lead. Catalog = 35 products; store VERSION 2 forces a reseed in browsers holding old data.
 - (Phase 1) Recommendation threshold: a product is recommended when its tag points ≥ 8 of 9 (관계 3 + 상황 3 + 연령대 2 must fit; 성별 +1 is a bonus). With ≥ 6 almost the whole catalog matched and the empty state was unreachable. Unselected group = match, so neutral chips show all 32.
 - (Phase 1) Chip pre-fill: 관계/연령대/성별 from derived tags; 상황 = 생일 only when the birthday is within 7 days, otherwise none. Tapping an active chip clears that group; 성별 has an explicit "전체".
@@ -79,7 +96,8 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Known issues
 
-_(none yet)_
+- White text on the blue message themes (감사, 축하) is ~2.4:1 contrast — copied from the real card (164646); softened with a text shadow. Other themes use dark text.
+- After code changes, a browser may keep old JS modules (python http.server / Live Server send no cache headers) → hard refresh (Ctrl+Shift+R) before the demo.
 
 ## Ideas / backlog (not in any phase — ask before building)
 
