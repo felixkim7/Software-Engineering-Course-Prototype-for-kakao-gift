@@ -3,7 +3,7 @@
 import { createSeed, orderNo } from "./seed-data.js";
 
 const KEY = "giftProto.v1";
-const VERSION = 1;
+const VERSION = 2; // bump whenever seed-data changes so browsers reseed
 const CHANGE_EVENT = "store:change";
 const DAY = 24 * 60 * 60 * 1000;
 

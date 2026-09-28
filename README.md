@@ -30,6 +30,7 @@ prototype/
   assets/img/           images cropped from docs/reference-screens/
 tools/
   crop-screens.py       re-crop images:  python tools/crop-screens.py   (needs Pillow)
+  fetch-web-images.py   re-download real 선물하기 product images (sources listed inside)
   check-core.mjs        core logic self-check:  node tools/check-core.mjs
 ```
 

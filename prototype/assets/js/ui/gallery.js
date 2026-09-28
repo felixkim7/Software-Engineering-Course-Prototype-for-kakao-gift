@@ -47,7 +47,7 @@ export function renderGallery(container) {
     ${item("Segmented · CategoryGrid", C.Segmented({ label: "홈 탭", active: "theme", options: [{ value: "theme", label: "선물 테마" }, { value: "cat", label: "카테고리" }, { value: "recent", label: "최근 본" }] }) + "<br>" + C.CategoryGrid(THEME_TILES))}
     ${item("ChipGroup · ProductCard grid3 (ranked)", C.ChipGroup({ label: "가격대", chips: PRICE_CHIPS, active: "3" }) + "<br>" + C.ProductGrid(ranking, { variant: "grid3", ranked: true, hrefBase: "buyer/product.html" }))}
     ${item("UnderlineTabs · ProductCard grid2", C.UnderlineTabs({ label: "케익·디저트", active: "all", options: [{ value: "all", label: "전체" }, { value: "cake", label: "케이크" }, { value: "dessert", label: "디저트" }] }) + "<br>" + C.ProductGrid(products.slice(6, 10), { variant: "grid2", hrefBase: "buyer/product.html" }))}
-    ${item("ProductCard mini (incl. emoji fallback)", C.ProductGrid([products[15], products[16], products[17], products[21], products[31]], { variant: "mini", hrefBase: "buyer/product.html" }))}
+    ${item("ProductCard mini", C.ProductGrid([products[15], products[16], products[17], products[21], products[31]], { variant: "mini", hrefBase: "buyer/product.html" }))}
     ${item("Badges · Tag · Avatars", `<div class="gallery__row">${statuses.map((s) => C.StatusBadge(s)).join("")}</div><br>
       <div class="gallery__row">${C.NewBadge()} ${C.Tag("무료배송")} ${C.PillBadge("생일 친구")}
       ${C.Avatar(null, { size: "s" })}${C.Avatar(null)}${C.Avatar(getUser("u1"), { size: "l" })}</div>`, { pad: true })}

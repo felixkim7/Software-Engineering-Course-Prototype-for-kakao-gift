@@ -63,7 +63,7 @@ const CATEGORY_TILES = [
   ["미니가전", "cat-headphone", "cat=digital"], ["과일·소고기", "cat-mango", "cat=food"], ["기초·색조", "cat-makeup", "cat=beauty"],
   ["향수·바디", "cat-perfume", "cat=beauty"], ["패션·주얼리", "cat-jewelry", "cat=fashion"], ["리빙·키친", "cat-living", "cat=living"],
   ["카페·치킨", "cat-cafe", "cat=cafe"], ["와인·위스키", "cat-wine", ""], ["골프·스포츠", "cat-golf", ""],
-  ["상품권", "cat-giftcard", ""], ["육아용품", "cat-kids", ""], ["팬덤·캐릭터", "cat-fandom", ""],
+  ["상품권", "cat-giftcard", ""], ["육아용품", "cat-kids", ""], ["팬덤·캐릭터", "cat-fandom", "cat=character"],
 ];
 const tileHref = (q) => (q.startsWith("cat=") ? `?browse=1&${q}#all-categories` : q ? `?browse=1&f=1&${q}` : "?browse=1");
 const toTiles = (rows) => rows.map(([label, image, q]) => ({ label, image, href: tileHref(q) }));

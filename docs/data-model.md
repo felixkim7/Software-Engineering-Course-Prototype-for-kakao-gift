@@ -22,7 +22,7 @@ persisted in `localStorage` under a single key `giftProto.v1` by `core/store.js`
   id: "p101",
   name: "아이스 아메리카노 2잔",
   brand: "Cafe Lumen",        // brand-style name; make seed names read like those in the screenshots
-  category: "cafe" | "dessert" | "beauty" | "flower" | "fashion" | "digital" | "health" | "food" | "living",
+  category: "cafe" | "dessert" | "beauty" | "flower" | "fashion" | "digital" | "health" | "food" | "living" | "character",
   type: "voucher" | "delivery",   // e-coupon vs physically shipped
   price: 9000,
   options: [ { id: "o1", label: "250ml" }, ... ] | [],  // delivery items may require an option

@@ -36,7 +36,7 @@ assert.deepEqual(tagLabels(tags), ["20대", "여성", "친구", "🎂 D-3"]);
 const f1 = filtersFromTags(tags);
 assert.deepEqual(f1, { relation: "friend", situation: "birthday", ageGroup: "20s", gender: "F" });
 const list = recommend(s.products, f1);
-assert.equal(list.length, 12);
+assert.equal(list.length, 14);
 assert.ok(list.every((p, i) => i === 0 || score(list[i - 1], f1) >= score(p, f1)));
 assert.equal(recommend(s.products, { relation: "friend", situation: "cheer", ageGroup: "50s+", gender: "M" }).length, 0);
 assert.equal(recommend(s.products, EMPTY_FILTERS).length, s.products.length);

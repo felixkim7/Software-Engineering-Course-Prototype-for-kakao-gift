@@ -25,7 +25,7 @@ export const SITUATION_LABELS = {
 };
 export const CATEGORY_LABELS = {
   cafe: "카페", dessert: "케익·디저트", beauty: "뷰티", flower: "꽃", fashion: "패션·주얼리",
-  digital: "디지털·가전", health: "건강", food: "식품", living: "리빙",
+  digital: "디지털·가전", health: "건강", food: "식품", living: "리빙", character: "캐릭터·굿즈",
 };
 export const PAYMENT_METHOD_LABELS = { card: "신용/체크카드", pay: "페이머니", bank: "계좌이체" };
 export const COURIERS = ["CJ대한통운", "롯데택배", "한진택배", "우체국택배", "로젠택배"];

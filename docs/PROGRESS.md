@@ -52,6 +52,7 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Decisions & assumptions
 
+- (Post-Phase 1, user) Age-fitting catalog: replaced the fictional-brand products with real 선물하기 listings (name, price, image from gift.kakao.com, downloaded by `tools/fetch-web-images.py`): 50대+/부모님 → 정관장 에브리타임 레귤러 67,000 · 정관장 에브리타임 리미티드 보자기 144,000 · 신세계푸드 한우 1++ 구이 선물세트 159,000 · 락토핏 50대+ 22,900; 10대/20대 → 춘식이 드레스업 인형 26,000 · 산리오 쿠로미 인형 27,900 · 빙글빙글 피카츄 23,000 · 올리브영 기프트카드 3만원권. 스타벅스 now has a real image (9,000원). New category `character` (캐릭터·굿즈) — the home's 팬덤·캐릭터 tile opens it. 하겐다즈 리얼블랑 / 투썸 narrowed from all ages to 20–40대 so age-specific gifts lead. Catalog = 35 products; store VERSION 2 forces a reseed in browsers holding old data.
 - (Phase 1) Recommendation threshold: a product is recommended when its tag points ≥ 8 of 9 (관계 3 + 상황 3 + 연령대 2 must fit; 성별 +1 is a bonus). With ≥ 6 almost the whole catalog matched and the empty state was unreachable. Unselected group = match, so neutral chips show all 32.
 - (Phase 1) Chip pre-fill: 관계/연령대/성별 from derived tags; 상황 = 생일 only when the birthday is within 7 days, otherwise none. Tapping an active chip clears that group; 성별 has an explicit "전체".
 - (Phase 1) Dynamic banner copy follows the 상황 chip first, then 관계; birthday uses the given name ("지우님 생일이 3일 남았어요 🎂", chip "생일 선물 BEST").
