@@ -63,3 +63,33 @@
 .addr-results { margin-top: var(--sp-3); }
 .addr-result { display: block; width: 100%; padding: var(--sp-3) 0; border-bottom: 1px solid var(--color-line); text-align: left; font-size: var(--fs-15); }
 .addr-result b { display: block; font-size: var(--fs-12); color: var(--color-blue); }
+
+/* ---------- decline / convert SCR-R04 (To-Be, no screenshot: cards, buttons, info rows reused) ---------- */
+.decide-head { padding: var(--sp-5) var(--page-x) var(--sp-4); }
+.decide-head .done-product { margin-top: 0; }
+.decide-head__title { margin-top: var(--sp-5); font-size: var(--fs-22); font-weight: var(--fw-bold); }
+.decide-head__title:focus, .decide-confirm__amount:focus, .decide-error:focus { outline: none; }
+.decide-head__sub { margin-top: var(--sp-1); font-size: var(--fs-14); color: var(--color-ink-3); }
+.decide-error { padding-bottom: var(--sp-3); }
+.decide-foot { padding: var(--sp-4) var(--page-x) var(--sp-8); text-align: center; font-size: var(--fs-13); color: var(--color-ink-3); }
+.decide-foot .text-btn { font-size: var(--fs-13); }
+.decide-confirm { --tone: var(--color-money); padding: var(--sp-8) var(--page-x); text-align: center; }
+.decide-confirm--decline { --tone: var(--color-danger); }
+.decide-confirm__kind { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-16); font-weight: var(--fw-bold); color: var(--tone); }
+.decide-confirm__amount { margin-top: var(--sp-2); font-size: var(--fs-36); font-weight: var(--fw-bold); }
+.decide-confirm__lead { margin-top: var(--sp-3); font-size: var(--fs-16); }
+.decide-confirm__rows { grid-template-columns: 96px 1fr; max-width: 320px; margin: var(--sp-5) auto 0; padding: var(--sp-4); border-radius: var(--radius-m); background: var(--color-bg-soft); text-align: left; }
+.decide-confirm__list { display: grid; gap: var(--sp-2); max-width: 320px; margin: var(--sp-5) auto 0; text-align: left; font-size: var(--fs-14); color: var(--color-ink-2); }
+.decide-confirm__list li::before { content: "· "; color: var(--tone); font-weight: var(--fw-bold); }
+.bottom-cta--split { display: grid; grid-template-columns: 1fr 2fr; gap: var(--sp-2); }
+.text-money { color: var(--color-money); font-weight: var(--fw-bold); }
+
+/* ---------- result SCR-R05 ---------- */
+.result-hero { --tone: var(--color-money); display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); padding: var(--sp-10) var(--page-x) var(--sp-6); text-align: center; }
+.result-hero--decline { --tone: var(--color-danger); }
+.result-hero__icon { width: 72px; height: 72px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--tone) 12%, var(--color-surface)); color: var(--tone); }
+.result-hero__title { font-size: var(--fs-24); font-weight: var(--fw-bold); }
+.result-hero__line { font-size: var(--fs-15); color: var(--color-ink-2); }
+.result-product { justify-content: center; }
+.result-tx { margin-top: var(--sp-4); text-align: center; font-size: var(--fs-12); color: var(--color-ink-3); }
+.result-actions { padding: var(--sp-6) var(--page-x); }

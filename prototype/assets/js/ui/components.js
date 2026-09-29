@@ -185,13 +185,13 @@ export function Stepper(steps, current) {
       <span class="stepper__dot">${i < current ? icon("check", { size: 12, strokeWidth: 3 }) : i + 1}</span>${escapeHtml(s)}</li>`).join("")}</ol>`;
 }
 
-/** Two option cards (convert vs decline). options: [{ id, icon, title, amount, points: [] }] */
+/** Two option cards (convert vs decline). options: [{ id, icon, title, amount, points: [] }]; **text** in a point is bold. */
 export function OptionCompare(options, selected = null) {
   return `<div class="option-compare" role="radiogroup" aria-label="선물 처리 방법">${options.map((o) => `
     <button class="option-card option-card--${o.id}" type="button" role="radio" data-value="${o.id}" aria-checked="${o.id === selected}">
       <span class="option-card__head">${icon(o.icon, { size: 22 })}<strong>${escapeHtml(o.title)}</strong><span class="option-card__radio" aria-hidden="true"></span></span>
       ${o.amount ? `<span class="option-card__amount">${escapeHtml(o.amount)}</span>` : ""}
-      <ul class="option-card__points">${o.points.map((pt) => `<li>${escapeHtml(pt)}</li>`).join("")}</ul>
+      <ul class="option-card__points">${o.points.map((pt) => `<li>${escapeHtml(pt).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>")}</li>`).join("")}</ul>
     </button>`).join("")}</div>`;
 }
 
@@ -205,6 +205,38 @@ export const MESSAGE_THEMES = {
 };
 /** 상황 chip from Phase 1 → card theme */
 export const THEME_FOR_SITUATION = { birthday: "birthday", thanks: "thanks", congrats: "congrats", cheer: "cheer", getwell: "cheer", casual: "basic" };
+
+/**
+ * Keyboard support for a role="radiogroup" of role="radio" buttons (ARIA radio pattern):
+ * one Tab stop, arrow keys move + select, Enter/Space/click select. onSelect(value) runs on every change.
+ */
+export function bindRadioGroup(group, onSelect) {
+  const items = () => [...group.querySelectorAll('[role="radio"]')];
+  const syncTabStops = () => {
+    const list = items();
+    const checked = list.find((i) => i.getAttribute("aria-checked") === "true") ?? list[0];
+    list.forEach((i) => (i.tabIndex = i === checked ? 0 : -1));
+  };
+  const choose = (el) => {
+    items().forEach((i) => i.setAttribute("aria-checked", String(i === el)));
+    syncTabStops();
+    onSelect(el.dataset.value);
+  };
+  const STEP = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+  group.addEventListener("click", (e) => {
+    const el = e.target.closest('[role="radio"]');
+    if (el) choose(el);
+  });
+  group.addEventListener("keydown", (e) => {
+    if (!(e.key in STEP)) return;
+    e.preventDefault();
+    const list = items();
+    const next = list[(list.indexOf(document.activeElement) + STEP[e.key] + list.length) % list.length];
+    next.focus();
+    choose(next);
+  });
+  syncTabStops();
+}
 
 /** Checkout / received-gift message card. The message is user text → always escaped. */
 export function GiftMessageCard({ message, theme = "basic", editable = false }) {

@@ -1,4 +1,4 @@
-// Placeholder for screens built in later phases (decline → Phase 4, seller → Phase 5).
+// Placeholder for the seller center until Phase 5.
 import { setCurrentUser } from "../core/store.js";
 import { AppHeader, EmptyState, initPage } from "../ui/components.js";
 
@@ -6,10 +6,6 @@ const ROLE = document.body.dataset.role;
 const HUB = { actionLabel: "데모 허브로", actionHref: "../index.html" };
 
 const CONFIG = {
-  decline: {
-    title: "금액 전환·거절 화면 준비 중", caption: "선물을 금액으로 받거나 거절하는 화면은 Phase 4에서 만들어져요.",
-    header: AppHeader({ variant: "sub", title: "선물 처리 방법" }), actionLabel: "받은 선물함으로", actionHref: "index.html",
-  },
   seller: { title: "주문·배송 통합 관리 준비 중", caption: "주문번호 기준 통합 목록과 엑셀 다운로드는 Phase 5에서 만들어져요.", ...HUB },
 }[ROLE];
 

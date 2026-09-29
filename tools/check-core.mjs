@@ -22,7 +22,7 @@ const fmt = await import(`${js}/core/format.js`);
 const s = store.getState();
 assert.equal(s.products.length >= 30, true);
 assert.equal(s.products.filter((p) => !p.convertible).length >= 2, true);
-assert.equal(store.listGiftsBy({ recipientId: "u1" }).length, 3);
+assert.equal(store.listGiftsBy({ recipientId: "u1" }).length, 5);
 const s1 = store.listGiftsBy({ sellerId: "s1" }).filter((g) => g.id.startsWith("g2"));
 const count = (st) => s1.filter((g) => g.status === st).length;
 assert.deepEqual([count("ADDRESS_SUBMITTED"), count("SHIPPED"), count("DELIVERED"), count("CONVERTED"), count("DECLINED_REFUNDED")], [5, 3, 2, 1, 1]);
@@ -100,6 +100,33 @@ assert.equal(fmt.formatCount(58000), "5.8만");
 assert.equal(fmt.maskPhone("010-1234-5678"), "010-****-5678");
 assert.equal(fmt.maskName("김지우"), "김*우");
 assert.equal(fmt.escapeHtml('<b>"hi"</b>'), "&lt;b&gt;&quot;hi&quot;&lt;/b&gt;");
+
+// UC-R3 decline / convert (Phase 4): preconditions, alt 8a, no double processing, notifications
+const { decideGift } = await import(`${js}/services/decision-service.js`);
+store.resetDemoData();
+const decide = (giftId, userId, choice = "convert") => decideGift({ giftId, userId, choice });
+assert.equal((await decide("g1005", "u1")).code, "NOT_CONVERTIBLE");
+assert.equal((await decide("g1004", "u1")).code, "DEADLINE_PASSED");
+assert.equal((await decide("g1001", "u2")).code, "NOT_RECIPIENT");
+assert.equal((await decide("g1003", "u1")).code, "ALREADY_USED");
+store.setDevFlag("failNextSettlement", true);
+assert.equal((await decide("g1001", "u1")).ok, false);
+assert.equal(store.getGift("g1001").status, "SENT"); // alt 8a: unchanged
+assert.equal(store.getWallet("u1").balance, 0);
+const buyerNotes = store.listNotifications("u0").length;
+const runs = await Promise.all([1, 2, 3].map(() => decide("g1001", "u1"))); // triple click, same key as the failed try
+assert.ok(runs.every((r) => r.ok));
+assert.equal(new Set(runs.map((r) => r.settlement.txId)).size, 1);
+assert.equal(store.getGift("g1001").status, "CONVERTED");
+assert.equal(store.getWallet("u1").balance, 32900);
+assert.equal(store.getWallet("u1").ledger.length, 1);
+assert.equal(store.listNotifications("u0").length, buyerNotes); // convert: buyer NOT notified
+assert.ok(!store.getGift("g1001").processing);
+assert.equal((await decide("g1001", "u1")).code, "ALREADY_DECIDED");
+assert.ok((await decide("g1002", "u1", "decline")).ok);
+assert.equal(store.getGift("g1002").status, "DECLINED_REFUNDED");
+assert.equal(store.getGift("g1002").settlement.type, "REFUND");
+assert.match(store.listNotifications("u5")[0].text, /지우님이 선물을 거절하여 13,500원이 환불되었어요/);
 
 // Reset + persistence
 store.resetDemoData();

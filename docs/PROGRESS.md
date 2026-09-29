@@ -5,7 +5,7 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Current phase
 
-**Phase 4 — Recipient decline / convert ★** (next; Phase 3 done 2026-09-29)
+**Phase 5 — Seller center** (next; Phase 4 done 2026-09-29)
 
 ## Phase checklist
 
@@ -13,7 +13,7 @@ Keep entries short. Newest notes at the top of each section.
 - [x] Phase 1 — Buyer: recipient selection & segmented recommendation
 - [x] Phase 2 — Buyer: checkout, payment, send, history
 - [x] Phase 3 — Recipient: inbox, gift view, delivery receipt
-- [ ] Phase 4 — Recipient: decline / convert to cash ★
+- [x] Phase 4 — Recipient: decline / convert to cash ★
 - [ ] Phase 5 — Seller center: integrated order + delivery, Excel, tracking upload
 - [ ] Phase 6 — Integration, polish, demo readiness
 
@@ -25,6 +25,25 @@ Keep entries short. Newest notes at the top of each section.
 - Acceptance criteria: all passed | exceptions: …
 - Notes: …
 -->
+
+### Phase 4 — Recipient decline / convert ★ (done 2026-09-29)
+- Built: `services/decision-service.js` (`decideGift()` = UC-R3 steps 7–9 + 4a with in-flight promise, `processing`
+  lock, idempotency key `decide-{giftId}`, status check on failure), `recipient/decline.html` + `pages/recipient-decline.js`
+  (SCR-R04: options → confirm → processing), `recipient/result.html` + `pages/recipient-result.js` (SCR-R05),
+  `bindRadioGroup()` (ARIA radio keyboard pattern), `OptionCompare` bold phrases, `.btn--danger`, `ALREADY_DECIDED` reason.
+- Acceptance criteria (headless Chrome + `node tools/check-core.mjs`):
+  - PASS convert: g1001 → CONVERTED, wallet 0 → 32,900 with one ledger entry after a triple click, buyer notifications +0,
+    buyer history still "전달 완료", gift view shows no CTA.
+  - PASS decline: a gift sent by u0 → DECLINED_REFUNDED (REFUND settlement), u0 sees "지우님이 선물을 거절하여 13,500원이
+    환불되었어요." and "거절됨 · 환불 완료".
+  - PASS `failNextSettlement`: error panel, back on 방법 선택 with the choice kept, status stays OPENED, lock cleared, no
+    wallet entry; retry with the same key succeeds.
+  - PASS double/triple click: one settlement, one credit, one notification (browser + Node).
+  - PASS blocked: 금액전환이 불가한 상품이에요 (g1005) / 처리 기한이 지났어요 (g1004) / 배송지 입력·사용 후 (g1003) /
+    `?as=u2` → 본인에게 온 선물만…; reopening a processed gift → 이미 처리된 선물이에요.
+  - PASS keyboard: one Tab stop, arrows move + select, 다음/이전 move focus to the step heading / chosen card.
+  - PASS no console errors; 390 px + frame. Phase 1–3 checks re-run without regressions.
+  - NEEDS MANUAL CHECK: "the two options are understandable without explanation" — ask a teammate to read SCR-R04 cold.
 
 ### Phase 3 — Recipient receive (done 2026-09-29)
 - Built: `recipient/index.html` + `pages/recipient-inbox.js` (SCR-R01), `recipient/gift.html` + `pages/recipient-gift.js`
@@ -78,6 +97,10 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Decisions & assumptions
 
+- (Phase 4) The UC-R3 settlement logic lives in `services/decision-service.js` (not in the page) so the rules are shared and testable in Node. The `processing` lock stores a timestamp and expires after 30 s so a closed tab can't leave a gift stuck.
+- (Phase 4) SCR-R04 options are stacked at phone width (side-by-side from 600 px+). A small 3-step stepper (방법 선택 → 확인 → 완료) was added for the same progress cue as the buyer flow. Convert confirm uses the app's yellow CTA; decline confirm uses the danger style.
+- (Phase 4) Seed adds two blocked demo gifts for u1: g1004 (배스킨라빈스, sent 35 days ago → 처리 기한이 지났어요) and g1005 (아빠 → 정관장, not convertible). Store VERSION 6.
+- (Phase 4) canDecide wording aligned with the spec: 금액전환이 불가한 상품이에요 / 처리 기한이 지났어요 / 이미 처리된 선물이에요.
 - (Phase 3) No R00–R03 reference screenshots exist → recipient screens are built only from matched components/tokens; no fake chat room (spec builds it only if the R00 screenshot exists).
 - (Phase 3) Recipient identity: `?as=` switches the viewing recipient and is remembered in `session.recipientId`; the hub's 수령자 card links to `recipient/?as=u1`.
 - (Phase 3) Inbox tabs: 사용 가능 = SENT/OPENED, 배송 = ADDRESS_SUBMITTED/SHIPPED, 완료 = DELIVERED/USED/CONVERTED/DECLINED_REFUNDED (tab labels show counts).
@@ -116,6 +139,7 @@ Keep entries short. Newest notes at the top of each section.
 ## Known issues
 
 - White text on the blue message themes (감사, 축하) is ~2.4:1 contrast — copied from the real card (164646); softened with a text shadow. Other themes use dark text.
+- `ui/components.js` is 287 lines (limit ~300) — split (e.g. products / chrome) if it grows in Phase 5–6.
 - After code changes, a browser may keep old JS modules (python http.server / Live Server send no cache headers) → hard refresh (Ctrl+Shift+R) before the demo.
 
 ## Ideas / backlog (not in any phase — ask before building)

@@ -129,6 +129,9 @@ const GIFT_ROWS = [
   ["g1001", "SENT", "u0", "u1", "p07", 0, "생일 축하해! 🎉 맛있게 먹어~", null],
   ["g1002", "OPENED", "u5", "u1", "p20", 28, "시험 끝난 기념! 커피 한 잔 해 ☕", null],
   ["g1003", "DELIVERED", "u6", "u1", "p06", 6, "늘 고마워 :)", ["김지우", "01234", "서울특별시 마포구 와우산로 94", "302호"]],
+  // two gifts that demo the UC-R3 preconditions: deadline passed / product not convertible
+  ["g1004", "OPENED", "u2", "u1", "p21", 35, "지난번에 고마웠어! 달달한 거 먹어", null],
+  ["g1005", "SENT", "u3", "u1", "p25", 1, "우리 딸 힘내라! 홍삼 꼭 챙겨 먹고", null],
   // seller s1 (하겐다즈 공식스토어) orders
   ["g2001", "ADDRESS_SUBMITTED", "u2", "c1", "p07", 1, "승진 축하드려요!", ["이도현", "04157", "서울특별시 마포구 마포대로 33", "1203호"]],
   ["g2002", "ADDRESS_SUBMITTED", "u3", "c2", "p13", 1, "생일 축하해", ["최유나", "06236", "서울특별시 강남구 테헤란로 152", "B동 801호"]],

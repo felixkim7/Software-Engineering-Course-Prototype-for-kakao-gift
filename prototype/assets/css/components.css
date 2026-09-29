@@ -9,6 +9,7 @@
 .btn--primary { background: var(--color-accent); color: var(--color-accent-ink); }
 .btn--dark { background: var(--color-ink); color: var(--color-on-dark); min-width: 105px; }
 .btn--grey { background: var(--color-tag-bg); color: var(--color-ink); }
+.btn--danger { background: var(--color-danger); color: var(--color-on-dark); }
 .btn--outline { background: var(--color-surface); border: 1px solid var(--color-line-strong); color: var(--color-ink); }
 .btn--small { height: var(--btn-h-s); border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-surface); font-size: var(--fs-15); }
 .btn--block { width: 100%; }
@@ -152,7 +153,7 @@
 .stepper__step.is-current .stepper__dot { background: var(--color-accent); border-color: var(--color-accent); }
 .stepper__step.is-done .stepper__dot { background: var(--color-ink-2); border-color: var(--color-ink-2); color: var(--color-on-dark); }
 
-.option-compare { display: grid; gap: var(--sp-3); }
+.option-compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-3); }
 .option-card { --tone: var(--color-ink); display: block; width: 100%; padding: var(--sp-4); text-align: left; border: 1px solid var(--color-line); border-radius: var(--radius-l); background: var(--color-surface); }
 .option-card--convert { --tone: var(--color-money); }
 .option-card--decline { --tone: var(--color-danger); }
@@ -161,7 +162,9 @@
 .option-card__radio { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--color-ink-4); }
 .option-card__amount { display: block; margin: var(--sp-2) 0 0 30px; font-size: var(--fs-20); font-weight: var(--fw-bold); color: var(--tone); }
 .option-card__points { margin: var(--sp-2) 0 0 30px; font-size: var(--fs-14); color: var(--color-ink-3); }
+.option-card__points li { padding: 2px 0; }
 .option-card__points li::before { content: "· "; }
+.option-card__points b { color: var(--color-ink); }
 .option-card[aria-checked="true"] { border: 2px solid var(--tone); padding: calc(var(--sp-4) - 1px); background: color-mix(in srgb, var(--tone) 5%, var(--color-surface)); }
 .option-card[aria-checked="true"] .option-card__radio { border: 6px solid var(--tone); }
 
