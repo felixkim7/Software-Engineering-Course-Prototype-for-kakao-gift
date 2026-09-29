@@ -84,7 +84,7 @@ export function openBulkUploadDialog({ orders, onApplied }) {
         <li><b>1</b><span>양식을 내려받아 택배사·송장번호를 입력하세요. <small>발송 대기 ${ready.length}건의 주문번호가 채워져 있어요.</small></span></li>
         <li><b>2</b><span>작성한 파일(.xlsx, .csv)을 올리면 한 줄씩 미리 검사해요. 오류가 있는 줄은 건너뛰어요.</span></li></ol>
       <div class="bulk-actions"><button class="btn btn--outline btn--small" type="button" data-action="template">양식 다운로드</button>
-        <button class="link-btn" type="button" data-action="sample">데모용 작성 예시 받기</button></div>
+        <button class="link-btn demo-helper" type="button" data-action="sample">데모용 작성 예시 받기</button></div>
       <label class="file-pick"><input type="file" accept=".xlsx,.csv" data-file><span class="btn btn--dark btn--small">파일 선택</span><small data-file-name>선택된 파일 없음</small></label>
       <div data-preview></div>
       <div class="dialog__actions"><button class="btn btn--grey" type="button" data-close>닫기</button>

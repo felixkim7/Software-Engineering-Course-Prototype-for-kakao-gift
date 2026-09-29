@@ -12,7 +12,7 @@ export const STATUS_LABELS = {
     DECLINED_REFUNDED: "거절됨 · 환불 완료",
   },
   seller: {
-    SENT: "배송지 입력 대기", OPENED: "배송지 입력 대기", ADDRESS_SUBMITTED: "발송 대기", SHIPPED: "발송 완료",
+    SENT: "배송지 입력 대기", OPENED: "배송지 입력 대기", ADDRESS_SUBMITTED: "발송 대기", SHIPPED: "배송 중",
     DELIVERED: "배송 완료", USED: "—", CONVERTED: "발송 불필요 (금액 전환)", DECLINED_REFUNDED: "발송 불필요 (거절·환불)",
   },
 };
@@ -42,7 +42,7 @@ export const COMMON = {
   search: "검색",
   more: "더보기",
   newBadge: "NEW",
-  loading: "처리 중입니다…",
+  loading: "처리 중이에요…",
   freeShipping: "무료배송",
   unsupported: "데모에서는 지원하지 않는 기능이에요.",
 };

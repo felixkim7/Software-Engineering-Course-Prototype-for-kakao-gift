@@ -67,7 +67,7 @@
 .chip[aria-pressed="true"] { background: var(--color-dark-panel); border-color: var(--color-dark-panel); color: var(--color-on-dark); font-weight: var(--fw-bold); }
 
 /* ---------- badges ---------- */
-.badge { --tone: var(--color-ink-3); display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: var(--radius-xs); font-size: var(--fs-11); font-weight: var(--fw-bold); color: var(--tone); background: color-mix(in srgb, var(--tone) 12%, var(--color-surface)); white-space: nowrap; }
+.badge { --tone: var(--color-ink-3); display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: var(--radius-xs); font-size: var(--fs-11); font-weight: var(--fw-bold); color: color-mix(in srgb, var(--tone), var(--color-ink-strong) 38%); background: color-mix(in srgb, var(--tone) 12%, var(--color-surface)); white-space: nowrap; } /* darkened text keeps small badges ≥ 4.5:1 */
 .badge--blue { --tone: var(--color-blue); }
 .badge--warning { --tone: var(--color-warning); }
 .badge--money { --tone: var(--color-money); }
@@ -136,7 +136,8 @@
 .info-box--blue { background: var(--color-info-bg); border: 1px solid var(--color-info-line); }
 .info-box--blue .icon { color: var(--color-blue); }
 .info-box--peach { background: var(--color-promo-bg); justify-content: center; font-weight: var(--fw-bold); }
-.info-box--danger { background: var(--color-danger-bg); color: var(--color-danger); }
+.info-box--danger { background: var(--color-danger-bg); color: var(--color-ink); }
+.info-box--danger .icon { color: var(--color-danger); }
 .info-box--warning { background: var(--color-warning-bg); color: var(--color-ink); }
 .info-box--warning .icon { color: var(--color-warning); }
 .empty-state { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); padding: 64px var(--sp-6); text-align: center; color: var(--color-ink-5); }
@@ -204,3 +205,14 @@
 .timeline li:last-child::before { background: var(--color-accent-ink); }
 .timeline time { display: block; font-size: var(--fs-12); color: var(--color-ink-3); }
 .sheet__close { margin-top: var(--sp-2); }
+
+/* ---------- demo chrome (ui/demo-chrome.js): role switcher + presentation mode ---------- */
+.role-switch { position: fixed; left: var(--sp-4); bottom: var(--sp-4); z-index: 300; font-size: var(--fs-13); }
+.role-switch summary { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: var(--radius-pill); background: var(--color-dark-panel); color: var(--color-on-dark); box-shadow: var(--shadow-notice); cursor: pointer; list-style: none; }
+.role-switch summary::-webkit-details-marker { display: none; }
+.role-switch nav { position: absolute; left: 0; bottom: calc(100% + var(--sp-2)); display: grid; min-width: 150px; padding: 6px; border-radius: var(--radius-l); background: var(--color-surface); box-shadow: var(--shadow-notice); }
+.role-switch nav a { padding: var(--sp-2) var(--sp-3); border-radius: var(--radius-s); }
+.role-switch nav a:hover, .role-switch nav a:focus-visible { background: var(--color-bg-soft); }
+.is-present .demo-helper { display: none !important; }
+@media (max-width: 480px) { .role-switch { left: var(--sp-2); bottom: 140px; } }
+

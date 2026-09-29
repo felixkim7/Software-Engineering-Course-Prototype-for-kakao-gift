@@ -54,7 +54,7 @@ function render() {
       <dt>${S.date}</dt><dd>${formatDate(gift.createdAt, { time: true })}</dd>
     </dl>
     <div class="done-actions"><a class="btn btn--outline" href="history.html">${S.history}</a><a class="btn btn--primary" href="index.html">${S.home}</a></div>
-    <p class="demo-link"><a href="../recipient/gift.html?gift=${gift.id}&as=${gift.recipientId}">${S.demoLink}</a></p>`;
+    <p class="demo-link demo-helper"><a href="../recipient/gift.html?gift=${gift.id}&as=${gift.recipientId}">${S.demoLink}</a></p>`;
 }
 
 async function resend(button) {

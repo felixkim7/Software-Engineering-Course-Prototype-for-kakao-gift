@@ -5,7 +5,7 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Current phase
 
-**Phase 6 — Integration, polish, demo readiness** (next; Phase 5 done 2026-09-29)
+**All phases complete** (Phase 6 done 2026-09-29) — demo-ready. Remaining manual checks are listed under Phase 6.
 
 ## Phase checklist
 
@@ -15,7 +15,7 @@ Keep entries short. Newest notes at the top of each section.
 - [x] Phase 3 — Recipient: inbox, gift view, delivery receipt
 - [x] Phase 4 — Recipient: decline / convert to cash ★
 - [x] Phase 5 — Seller center: integrated order + delivery, Excel, tracking upload
-- [ ] Phase 6 — Integration, polish, demo readiness
+- [x] Phase 6 — Integration, polish, demo readiness
 
 ## Phase log
 
@@ -25,6 +25,36 @@ Keep entries short. Newest notes at the top of each section.
 - Acceptance criteria: all passed | exceptions: …
 - Notes: …
 -->
+
+### Phase 6 — Integration, polish, demo readiness (done 2026-09-29)
+- Built: `ui/demo-chrome.js` (floating 역할 전환 menu + presentation mode), hub 발표 모드 toggle, component gallery
+  behind `?dev=1`, `docs/demo-script.md`, `docs/screenshots.md`, README rewrite.
+- Bug sweep / walk-through: the spec's 6-step cross-role walk-through (buyer → recipient address → seller Excel +
+  tracking → recipient 배송 중 → decline → convert) was scripted and run **twice in a row after one reset: 28/28 steps OK,
+  no console errors or warnings** — nothing was broken before the polish work.
+- Fixed in this phase: low-contrast small badges / greyed rows / deadline chip / error text / NEW pill / danger button
+  (darkened text or To-Be colours, palette unchanged); label-in-name mismatches (수정, banner, deadline chip); seller label
+  "발송 완료" vs tile "배송 중" → one word "배송 중" for every role, seller tiles and recipient timeline read `strings.js`;
+  remaining 합니다체 system messages → 해요체 (formal consent lines kept as in the real app).
+- Acceptance criteria:
+  - PASS walk-through twice after one reset (see above).
+  - PASS `?present=1`: role switcher + helper links (B05 수령자 화면 링크, 배송 완료 처리, 데모용 작성 예시, dev buttons)
+    hidden on every page, remembered until `?present=0`; NEW pills kept.
+  - PASS zero console errors or warnings: 12 mobile pages × 360/390/430 px, seller × 1024/1280/1440 px, hub; no page
+    scrolls sideways.
+  - PASS Lighthouse accessibility: buyer home 100, recipient decline 100, seller center 100 (also checkout 100,
+    recipient gift view 100).
+  - PASS demo-script.md and screenshots.md written against the actual UI (product paths and URLs checked).
+  - PASS PROGRESS.md: all phases ticked; known issues accepted below.
+- Consistency / a11y / performance / traceability: status labels from `strings.js` only; every page module starts
+  with its screen IDs + use cases; keyboard-operable controls (native elements, ARIA radio groups, focus traps in
+  overlays), visible focus, `prefers-reduced-motion`; recommendation filter ~2 ms, seller filters ~15 ms with 213 rows.
+- Final fidelity pass (side by side with 164450 / 164646 / 164809 at 411 px): header, GNB, cards, typography and colours
+  match. Intentional deviations: friend band with search + list instead of the single "+" card (To-Be B01), stepper on
+  buyer screens (To-Be), labelled theme thumbnails without the "전체" button, history as a list of all sent gifts (the
+  reference shows a single order's detail), plus the B03 deviations recorded in Phase 1.
+- NEEDS MANUAL CHECK (can't be automated): a teammate reads SCR-R04 cold and understands both options; open one
+  downloaded .xlsx in Excel / Numbers / Google Sheets; rehearse demo-script.md once on the presentation laptop.
 
 ### Phase 5 — Seller center (done 2026-09-29)
 - Built: `seller/index.html` + `pages/seller-center.js` (SCR-S01), `ui/seller-dialogs.js` (SCR-S02 export, SCR-S03 bulk
@@ -120,6 +150,11 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Decisions & assumptions
 
+- (Phase 6, demo guide) Sub-page headers (recipient screens, 선물 보낸 내역) now also have ✕ → demo hub, so every mobile screen can return to the hub in one tap while 발표 모드 hides the role switcher. Korean step-by-step guide: `README.ko.md`.
+- (Phase 6) Presentation mode hides only demo chrome (역할 전환, `.demo-helper` links, dev buttons); the hub's reset and failure toggles stay visible because the alternate-flow demo needs them. During a presented demo, switch roles with the header ✕ (mobile) or 데모 허브 (seller) → hub.
+- (Phase 6) SHIPPED reads "배송 중" for every role (data-model.md table updated; the seller label was "발송 완료", which clashed with the spec's 배송 중 tile).
+- (Phase 6) `--color-danger` (#D63A28) and `--color-new` (#D63A28) are To-Be colours darkened for 4.5:1; small badges darken their text with color-mix; `--color-ink-muted` (#666) for greyed text on grey. Colours measured from the screenshots are unchanged.
+- (Phase 6) Optional stretch items (buyer cancel, seller CS inbox, onboarding tour) were not built — still in the backlog, ask first.
 - (Phase 5) SheetJS is loaded as the `xlsx-js-style@1.2.0` build (SheetJS 0.18.5 + cell styles) because the community `xlsx@0.18.5` build can't write the bold header the spec asks for; same `window.XLSX` API, same jsDelivr CDN.
 - (Phase 5) Export cells starting with = + - @ are prefixed with ' (CSV/formula-injection guard); "no option" exports as an empty cell.
 - (Phase 5) Bulk upload uses one courier sync for all rows (`registerTrackingBulk`) so a 10-row upload doesn't take 10× the mock latency. The upload dialog has a small "데모용 작성 예시 받기" file (valid rows + 3 deliberate errors) so validation can be shown live without editing Excel.
@@ -166,9 +201,13 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Known issues
 
-- White text on the blue message themes (감사, 축하) is ~2.4:1 contrast — copied from the real card (164646); softened with a text shadow. Other themes use dark text.
-- `ui/components.js` is 287 lines (limit ~300) — split (e.g. products / chrome) if it grows in Phase 5–6.
-- After code changes, a browser may keep old JS modules (python http.server / Live Server send no cache headers) → hard refresh (Ctrl+Shift+R) before the demo.
+All remaining items are **accepted** (no open bugs):
+
+- Accepted: white text on the blue message themes (감사, 축하) is ~2.4:1 — it is the real card from 164646 (screenshot wins for visuals), 30 px bold with a text shadow; other themes use dark text.
+- Accepted: sale-red prices / 최대혜택가 and the pink 생일 pills are the real app's colours (≈ 3–3.7:1 for small text); Lighthouse still scores 100 on the audited pages.
+- Accepted: `ui/components.js` is 289 lines (limit ~300); Phase 6 additions went to `ui/demo-chrome.js` instead.
+- Accepted: after code changes a browser may keep old JS modules (local servers send no cache headers) → Ctrl+Shift+R before the demo (README + demo-script).
+- Accepted: two exports on the same day share a filename, so the browser renames or overwrites the second download.
 
 ## Ideas / backlog (not in any phase — ask before building)
 

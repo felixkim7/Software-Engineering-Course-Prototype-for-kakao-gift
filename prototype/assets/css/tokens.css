@@ -14,6 +14,7 @@
   --color-ink-3: #767676;
   --color-ink-4: #949494;
   --color-ink-5: #CCCCCC;
+  --color-ink-muted: #666666;   /* greyed-out text on grey backgrounds (≥ 4.5:1) */
   --color-on-dark: #FFFFFF;
   --color-line: #EDEDED;
   --color-line-strong: #DADADA;
@@ -67,10 +68,10 @@
   /* Color — To-Be only (no screenshot; chosen to fit the palette) */
   --color-positive: #1E9E62;
   --color-warning: #E08A00;
-  --color-danger: var(--color-sale);
+  --color-danger: #D63A28;      /* To-Be decline/error red: ≥ 4.5:1 on white and with white text */
   --color-info: var(--color-blue);
   --color-money: var(--color-blue);
-  --color-new: var(--color-sale-strong);
+  --color-new: #D63A28;         /* NEW pill: sale red darkened for 4.5:1 with white text */
 
   /* Type */
   --font-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", system-ui, sans-serif;

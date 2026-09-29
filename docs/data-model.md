@@ -110,7 +110,7 @@ Status labels (Korean UI):
 | SENT | 새 선물 | 전달 완료 | 배송지 입력 대기 |
 | OPENED | 확인함 | 수령자 확인 | 배송지 입력 대기 |
 | ADDRESS_SUBMITTED | 배송 준비 중 | 배송 준비 중 | **발송 대기** |
-| SHIPPED | 배송 중 | 배송 중 | 발송 완료 |
+| SHIPPED | 배송 중 | 배송 중 | 배송 중 *(Phase 6: same word for all roles)* |
 | DELIVERED | 배송 완료 | 배송 완료 | 배송 완료 |
 | USED | 사용 완료 | 사용 완료 | — |
 | CONVERTED | 금액으로 받음 | 전달 완료 *(buyer is not told)* | **발송 불필요 (금액 전환)** |

@@ -36,7 +36,7 @@ export function RecipientCard(user, tags, changeHref) {
     <div class="recipient-card__top">
       ${Avatar(user, { size: "l" })}
       <p class="recipient-card__title"><b>${escapeHtml(user.name)}</b>에게 선물하기</p>
-      <a class="mini-btn" href="${changeHref}" aria-label="받는 사람 변경">${icon("userPlus", { size: 16, strokeWidth: 1.5 })}수정</a>
+      <a class="mini-btn" href="${changeHref}">${icon("userPlus", { size: 16, strokeWidth: 1.5 })}수정<span class="visually-hidden"> (받는 사람 변경)</span></a>
     </div>
     <div class="recipient-card__bottom">
       <p class="recipient-card__tags">${labels.map(escapeHtml).join(" · ")}

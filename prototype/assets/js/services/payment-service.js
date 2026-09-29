@@ -9,7 +9,7 @@ const inFlight = new Map(); // key → pending promise (blocks double clicks whi
  * failure is not, so the caller can retry with the same key.
  */
 function processOnce(kind, idempotencyKey, amount, failFlag) {
-  if (!idempotencyKey) return Promise.resolve({ ok: false, code: "MISSING_IDEMPOTENCY_KEY", message: "요청 키가 없습니다." });
+  if (!idempotencyKey) return Promise.resolve({ ok: false, code: "MISSING_IDEMPOTENCY_KEY", message: "요청 정보가 올바르지 않아요." });
   const key = `${kind}:${idempotencyKey}`;
   const done = getIdempotentResult(key);
   if (done) return Promise.resolve(done);
@@ -17,7 +17,7 @@ function processOnce(kind, idempotencyKey, amount, failFlag) {
 
   const run = (async () => {
     await latency();
-    if (!Number.isInteger(amount) || amount <= 0) return { ok: false, code: "INVALID_AMOUNT", message: "금액이 올바르지 않습니다." };
+    if (!Number.isInteger(amount) || amount <= 0) return { ok: false, code: "INVALID_AMOUNT", message: "금액이 올바르지 않아요." };
     if (consumeDevFlag(failFlag)) return FAILURES[failFlag];
     const result = { ok: true, txId: `tx_${kind}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, amount };
     saveIdempotentResult(key, result);
@@ -29,8 +29,8 @@ function processOnce(kind, idempotencyKey, amount, failFlag) {
 }
 
 const FAILURES = {
-  failNextPayment: { ok: false, code: "PAYMENT_DECLINED", message: "결제가 승인되지 않았습니다. 다른 결제수단을 선택하거나 다시 시도해 주세요." },
-  failNextSettlement: { ok: false, code: "SETTLEMENT_FAILED", message: "일시적인 오류로 처리하지 못했습니다. 잠시 후 다시 시도해 주세요." },
+  failNextPayment: { ok: false, code: "PAYMENT_DECLINED", message: "결제가 승인되지 않았어요. 다른 결제수단을 선택하거나 다시 시도해 주세요." },
+  failNextSettlement: { ok: false, code: "SETTLEMENT_FAILED", message: "일시적인 오류로 처리하지 못했어요. 잠시 후 다시 시도해 주세요." },
 };
 
 export function pay({ amount, method, idempotencyKey }) {

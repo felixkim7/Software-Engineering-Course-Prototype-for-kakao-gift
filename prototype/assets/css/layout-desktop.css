@@ -75,7 +75,7 @@ body.desktop { background: var(--color-bg-grey); min-height: 100vh; }
 /* ---------- seller center SCR-S01~S03 (no seller screenshot: plain admin layout in the app palette) ---------- */
 .seller-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-4); margin-bottom: var(--sp-4); }
 .seller-head .seller__h1 { margin: 0; }
-.asis-note { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1); font-size: var(--fs-13); color: var(--color-ink-3); }
+.asis-note { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1); font-size: var(--fs-13); color: var(--color-ink-muted); }
 .asis-note span { text-decoration: line-through; }
 .asis-note b { color: var(--color-ink); }
 .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); margin-bottom: var(--sp-4); }
@@ -98,8 +98,8 @@ body.desktop { background: var(--color-bg-grey); min-height: 100vh; }
 .clamp { display: -webkit-box; min-width: 170px; max-width: 240px; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; white-space: normal; }
 .track-form { display: inline-flex; gap: var(--sp-1); }
 .track-form .input--s { width: 132px; }
-.muted { color: var(--color-ink-4); }
-.text-positive { color: var(--color-positive); }
+.muted { color: var(--color-ink-muted); }
+.text-positive { color: color-mix(in srgb, var(--color-positive), var(--color-ink-strong) 38%); }
 .text-danger { color: var(--color-danger); }
 .input[aria-invalid="true"] { border-color: var(--color-danger); }
 
@@ -111,7 +111,7 @@ body.desktop { background: var(--color-bg-grey); min-height: 100vh; }
 .dt th:nth-child(2), .dt td:nth-child(2) { left: 40px; box-shadow: 1px 0 0 var(--color-line); }
 .dt tbody tr { cursor: pointer; }
 .dt tbody tr:hover td { background: var(--color-bg-soft); }
-.dt tr.is-muted td { background: var(--color-bg-grey); color: var(--color-ink-4); }
+.dt tr.is-muted td { background: var(--color-bg-grey); color: var(--color-ink-muted); }
 .dt tr.is-error td { background: var(--color-danger-bg); }
 .dt-scroll--short { max-height: 280px; }
 

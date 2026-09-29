@@ -243,7 +243,7 @@ export function createSeed(now = new Date()) {
       { userId: "u1", balance: 0, ledger: [] },
       { userId: "u6", balance: converted.amount, ledger: [{ at: converted.settlement.at, amount: converted.amount, giftId: converted.id, reason: "CONVERT" }] },
     ],
-    devFlags: { failNextPayment: false, failNextSettlement: false, failNextMessage: false, showNewBadges: true },
+    devFlags: { failNextPayment: false, failNextSettlement: false, failNextMessage: false, showNewBadges: true, presentMode: false },
     idempotency: {},
     auditLog: [],
     session: { currentUserId: "u0" },

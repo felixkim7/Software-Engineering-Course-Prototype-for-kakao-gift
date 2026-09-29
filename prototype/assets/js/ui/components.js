@@ -6,6 +6,7 @@ import { STATUS_LABELS, COMMON } from "../core/strings.js";
 import { getDevFlags } from "../core/store.js";
 import { icon } from "./icons.js";
 import { ensureToastRegion, toast } from "./overlays.js";
+import { applyDemoMode } from "./demo-chrome.js";
 
 const HUB_URL = new URL("../../../index.html", import.meta.url).href;
 export const imgSrc = (name) => new URL(`../../img/${name}.jpg`, import.meta.url).href;
@@ -25,11 +26,14 @@ export function StatusBar(now = new Date()) {
     <span class="statusbar__right">LTE ${icon("signal", { size: 14 })} 61% ${icon("battery", { size: 18, strokeWidth: 1.5 })}</span></div>`;
 }
 
-/** variant: "home" (‹ bag · title · search ✕) | "sub" (‹ title-left · search) | "modal" (‹ · title · ✕) */
+/**
+ * variant: "home" (‹ bag · title · search ✕) | "sub" (‹ title-left · search ✕) | "modal" (‹ · title · ✕).
+ * ✕ closes the gift webview → demo hub, so every mobile screen can return to the hub in one tap (also in 발표 모드).
+ */
 export function AppHeader({ variant = "home", title = COMMON.appTitle, back = true } = {}) {
   const btn = (name, label, action) => `<button class="icon-btn" type="button" data-action="${action}" aria-label="${label}">${icon(name)}</button>`;
   const left = [back ? btn("back", COMMON.back, "back") : "", variant === "home" ? btn("bag", "장바구니", "cart") : ""].join("");
-  const right = variant === "sub" ? btn("search", COMMON.search, "search")
+  const right = variant === "sub" ? btn("search", COMMON.search, "search") + btn("close", COMMON.close, "close")
     : variant === "modal" ? btn("close", COMMON.close, "close")
     : btn("search", COMMON.search, "search") + btn("close", COMMON.close, "close");
   return `<header class="app-header app-header--${variant}">
@@ -141,7 +145,7 @@ export function CategoryGrid(items) {
 export function BannerCarousel(slides, { label = "기획전" } = {}) {
   return `<section class="banner" aria-roledescription="carousel" aria-label="${escapeHtml(label)}">
     <div class="banner__track">${slides.map((s, i) => `
-      <a class="banner__slide" href="${s.href ?? "#"}" style="--banner-bg: ${s.color}" aria-label="${i + 1} / ${slides.length}">
+      <a class="banner__slide" href="${s.href ?? "#"}" style="--banner-bg: ${s.color}">${slides.length > 1 ? `<span class="visually-hidden">${i + 1} / ${slides.length}</span>` : ""}
         <span class="banner__chip">${escapeHtml(s.chip)}</span>
         <strong class="banner__title">${escapeHtml(s.title).replaceAll("\n", "<br>")}</strong>
         <span class="banner__img">${Thumb(s.image)}</span></a>`).join("")}</div>
@@ -270,6 +274,7 @@ export const ScrollTopButton = () =>
 export function initPage() {
   document.querySelectorAll("[data-statusbar]").forEach((el) => (el.outerHTML = StatusBar()));
   document.documentElement.classList.toggle("hide-new", !getDevFlags().showNewBadges);
+  applyDemoMode(); // role switcher + ?present=1
   ensureToastRegion();
   const scroller = document.querySelector(".phone__body");
   const topBtn = document.querySelector(".scroll-top");

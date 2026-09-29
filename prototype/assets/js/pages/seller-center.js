@@ -31,10 +31,10 @@ const S = {
 };
 const GROUPS = {
   all: { label: "전체", statuses: null },
-  waiting: { label: "배송지 입력 대기", statuses: ["SENT", "OPENED"] },
-  ready: { label: "발송 대기", statuses: ["ADDRESS_SUBMITTED"] },
-  shipping: { label: "배송 중", statuses: ["SHIPPED"] },
-  delivered: { label: "배송 완료", statuses: ["DELIVERED"] },
+  waiting: { label: STATUS_LABELS.seller.SENT, statuses: ["SENT", "OPENED"] }, // labels come from strings.js (one source)
+  ready: { label: STATUS_LABELS.seller.ADDRESS_SUBMITTED, statuses: ["ADDRESS_SUBMITTED"] },
+  shipping: { label: STATUS_LABELS.seller.SHIPPED, statuses: ["SHIPPED"] },
+  delivered: { label: STATUS_LABELS.seller.DELIVERED, statuses: ["DELIVERED"] },
   noship: { label: "발송 불필요", statuses: ["CONVERTED", "DECLINED_REFUNDED"] },
 };
 const TILES = ["ready", "shipping", "delivered", "noship"];
@@ -92,7 +92,7 @@ function trackingCell(r) {
     return `<span class="track-form"><input class="input input--s" data-tracking="${r.id}" inputmode="numeric" maxlength="15" placeholder="${S.trackingPlaceholder}"
       value="${escapeHtml(drafts.get(r.id)?.trackingNo ?? "")}" aria-label="${r.orderNo} 송장번호"><button class="btn btn--small" type="button" data-register="${r.id}">${S.register}</button></span>`;
   }
-  if (r.status === "SHIPPED") return `${escapeHtml(r.trackingNo)} <button class="link-btn" type="button" data-deliver="${r.id}">${S.deliver}</button>`;
+  if (r.status === "SHIPPED") return `${escapeHtml(r.trackingNo)} <button class="link-btn demo-helper" type="button" data-deliver="${r.id}">${S.deliver}</button>`;
   if (r.status === "CONVERTED" || r.status === "DECLINED_REFUNDED") return `<span class="muted">${S.noShip}</span>`; // never takes a tracking number
   return escapeHtml(r.trackingNo || "—");
 }
@@ -127,7 +127,7 @@ function renderShell() {
       <button class="btn btn--dark btn--small" type="button" data-action="upload">${icon("upload", { size: 18 })}${S.upload}</button>
     </div>
     <div class="card" data-table></div>
-    ${new URLSearchParams(location.search).has("dev") ? `<p class="dev-row"><button class="link-btn" type="button" data-action="dev-orders">${S.dev}</button></p>` : ""}`;
+    ${new URLSearchParams(location.search).has("dev") ? `<p class="dev-row demo-helper"><button class="link-btn" type="button" data-action="dev-orders">${S.dev}</button></p>` : ""}`;
   table = mountDataTable(app.querySelector("[data-table]"), {
     columns: COLUMNS, rows: [], rowKey: "orderNo", caption: S.title, emptyText: S.empty,
     rowClass: (r) => (GROUPS.noship.statuses.includes(r.status) ? "is-muted" : ""),

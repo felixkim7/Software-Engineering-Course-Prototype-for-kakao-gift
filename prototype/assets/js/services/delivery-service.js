@@ -43,7 +43,7 @@ export async function registerTrackingBulk(items) {
 
 export async function advanceDelivery({ giftId }) {
   await latency();
-  if (getGift(giftId)?.status !== "SHIPPED") return { ok: false, code: "NOT_SHIPPED", message: "배송 중인 주문이 아닙니다." };
+  if (getGift(giftId)?.status !== "SHIPPED") return { ok: false, code: "NOT_SHIPPED", message: "배송 중인 주문이 아니에요." };
   updateGift(giftId, { delivery: { deliveredAt: new Date().toISOString() } });
   transition(giftId, "DELIVERED", "배송 완료");
   return { ok: true };

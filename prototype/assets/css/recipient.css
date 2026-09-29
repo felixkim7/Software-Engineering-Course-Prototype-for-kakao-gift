@@ -18,7 +18,7 @@
 .gift-bubble__body { padding: 10px var(--sp-3); overflow: hidden; font-size: var(--fs-14); color: var(--color-ink-2); white-space: nowrap; text-overflow: ellipsis; }
 
 .deadline-chip { display: inline-grid; place-items: center; height: 20px; padding: 0 var(--sp-2); border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); font-size: var(--fs-11); font-weight: var(--fw-bold); color: var(--color-ink-3); }
-.deadline-chip.is-soon { border-color: var(--color-warning); background: var(--color-warning-bg); color: var(--color-warning); }
+.deadline-chip.is-soon { border-color: var(--color-warning); background: var(--color-warning-bg); color: color-mix(in srgb, var(--color-warning), var(--color-ink-strong) 38%); }
 .deadline-chip.is-expired { color: var(--color-ink-4); }
 
 /* ---------- gift view SCR-R02 ---------- */

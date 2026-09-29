@@ -11,7 +11,7 @@ const INTERACTIVE = "input, select, button, a, label, textarea";
  * rowClass(row) → extra class for a <tr>; onRowClick(row) → called when a row (not a control in it) is clicked.
  */
 export function mountDataTable(container, {
-  columns, rows, rowKey = "id", filter = null, caption = "", rowClass = () => "", onRowClick = null, emptyText = "표시할 주문이 없습니다.",
+  columns, rows, rowKey = "id", filter = null, caption = "", rowClass = () => "", onRowClick = null, emptyText = "표시할 주문이 없어요.",
 }) {
   const view = { rows, sortKey: null, sortDir: 1, filterValue: "", selected: new Set() };
 

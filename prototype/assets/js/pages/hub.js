@@ -8,7 +8,7 @@ const S = {
   label: "CSE4115 prototype",
   title: "카카오톡 선물하기 To-Be 프로토타입",
   course: "CSE4115 Team Assignment 1 · 재구축 서비스 정의",
-  sub: "역할을 골라 유스케이스 시나리오를 따라가 보세요. 데이터는 이 브라우저에만 저장됩니다.",
+  sub: "역할을 골라 유스케이스 시나리오를 따라가 보세요. 데이터는 이 브라우저에만 저장돼요.",
   rolesTitle: "역할 선택",
   open: "열기",
   controlsTitle: "데모 설정",
@@ -31,7 +31,10 @@ const FLAGS = [
   ["failNextSettlement", "다음 환불·금액 전환 실패 (UC-R3 8a)"],
   ["failNextMessage", "다음 선물 메시지 전송 실패"],
   ["showNewBadges", "NEW 배지 표시"],
+  ["presentMode", "발표 모드 (역할 전환 버튼·도우미 링크 숨김)"],
 ];
+
+const DEV = new URLSearchParams(location.search).has("dev"); // component gallery only in dev mode (?dev=1)
 
 function render() {
   document.querySelector("#app").innerHTML = `
@@ -54,19 +57,20 @@ function render() {
         ${FLAGS.map(([key, label]) => `<label class="switch"><input type="checkbox" data-flag="${key}">${label}</label>`).join("")}
       </div></section>
 
-    <details class="hub__section gallery" id="gallery" ${location.hash === "#gallery" ? "open" : ""}><summary>${S.galleryTitle}</summary><div data-gallery></div></details>`;
+    ${DEV ? `<details class="hub__section gallery" id="gallery" ${location.hash === "#gallery" ? "open" : ""}><summary>${S.galleryTitle}</summary><div data-gallery></div></details>` : ""}`;
 }
 
 function syncFlags() {
   const flags = getDevFlags();
   document.querySelectorAll("[data-flag]").forEach((input) => (input.checked = !!flags[input.dataset.flag]));
   document.documentElement.classList.toggle("hide-new", !flags.showNewBadges);
+  document.documentElement.classList.toggle("is-present", Boolean(flags.presentMode));
 }
 
 render();
 initPage();
 syncFlags();
-renderGallery(document.querySelector("[data-gallery]"));
+if (DEV) renderGallery(document.querySelector("[data-gallery]"));
 subscribe(syncFlags); // flags auto-reset after a service consumes them (also from other tabs)
 
 document.addEventListener("click", (e) => {
@@ -74,7 +78,7 @@ document.addEventListener("click", (e) => {
   if (roleLink) setCurrentUser(roleLink.dataset.user);
   if (e.target.closest('[data-action="reset"]')) {
     resetDemoData();
-    renderGallery(document.querySelector("[data-gallery]"));
+    if (DEV) renderGallery(document.querySelector("[data-gallery]"));
     toast(S.resetDone);
   }
 });

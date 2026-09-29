@@ -1,5 +1,6 @@
 // Recipient-side components (SCR-R01~R03). Built from the app's existing styles — no reference screenshot.
 import { dDay, daysUntil, escapeHtml, formatDate } from "../core/format.js";
+import { STATUS_LABELS } from "../core/strings.js";
 import { icon } from "./icons.js";
 
 /** KakaoTalk-style "gift arrived" bubble for SENT gifts, with a NEW dot. */
@@ -15,7 +16,7 @@ export function DeadlineChip(gift, now = new Date()) {
   const days = daysUntil(gift.decisionDeadline, now);
   if (days < 0) return `<span class="deadline-chip is-expired">기한 만료</span>`;
   const label = `금액전환·거절 가능 기한 ${formatDate(gift.decisionDeadline)}까지`;
-  return `<span class="deadline-chip ${days <= 3 ? "is-soon" : ""}" title="${label}" aria-label="${label}">${dDay(gift.decisionDeadline, now)}</span>`;
+  return `<span class="deadline-chip ${days <= 3 ? "is-soon" : ""}" title="${label}">${dDay(gift.decisionDeadline, now)}<span class="visually-hidden"> ${label}</span></span>`;
 }
 
 /** Fake but stable barcode drawn from the digits of `code`. */
@@ -37,11 +38,7 @@ export function Barcode(code) {
 
 export const barcodeNumber = (gift) => gift.orderNo.replace("-", "").slice(-12);
 
-const DELIVERY_STEPS = [
-  ["ADDRESS_SUBMITTED", "배송지 입력 · 배송 준비 중"],
-  ["SHIPPED", "상품 발송"],
-  ["DELIVERED", "배송 완료"],
-];
+const DELIVERY_STEPS = ["ADDRESS_SUBMITTED", "SHIPPED", "DELIVERED"].map((s) => [s, STATUS_LABELS.recipient[s]]);
 
 /** Read-only delivery progress for ADDRESS_SUBMITTED / SHIPPED / DELIVERED gifts. */
 export function DeliveryTimeline(gift) {
