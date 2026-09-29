@@ -30,6 +30,14 @@ export function maskPhone(phone) {
   return String(phone).replace(/^(\d{3})-?\d{3,4}-?(\d{4})$/, "$1-****-$2");
 }
 
+/** "서울특별시 마포구 마포대로 33" → "서울특별시 마포구 ***" (kept up to the 구/군/동, the rest masked) */
+export function maskAddress(address) {
+  const parts = String(address ?? "").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "";
+  const cut = parts.slice(0, 3).findLastIndex((p) => /(구|군|동|읍|면)$/.test(p));
+  return `${parts.slice(0, cut >= 0 ? cut + 1 : Math.min(2, parts.length)).join(" ")} ***`;
+}
+
 /** "김지우" → "김*우", "김민" → "김*" */
 export function maskName(name) {
   const s = String(name);

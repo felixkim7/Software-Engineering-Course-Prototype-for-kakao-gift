@@ -3,7 +3,7 @@
 import { createSeed, orderNo } from "./seed-data.js";
 
 const KEY = "giftProto.v1";
-const VERSION = 6; // bump whenever seed-data changes so browsers reseed
+const VERSION = 7; // bump whenever seed-data changes so browsers reseed
 const CHANGE_EVENT = "store:change";
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -150,6 +150,20 @@ export function markNotificationsRead(userId) {
   if (!unread.length) return;
   unread.forEach((n) => (n.read = true));
   save({ type: "notification:read", userId });
+}
+
+/** Accountability: who viewed or exported personal data (seller drawer / full-PII export). */
+export function logAccess({ actor, action, giftId = null, count = 1 }) {
+  state.auditLog.push({ at: new Date().toISOString(), actor, action, giftId, count });
+  save({ type: "audit", action });
+}
+export const listAccessLog = () => state.auditLog;
+
+/** Dev helper (seller "주문 200건 생성"): append generated orders, skipping ids that already exist. */
+export function importGifts(gifts) {
+  const known = new Set(state.gifts.map((g) => g.id));
+  state.gifts.push(...gifts.filter((g) => !known.has(g.id)));
+  save({ type: "gift:import", count: gifts.length });
 }
 
 export function creditWallet(userId, amount, giftId, reason) {

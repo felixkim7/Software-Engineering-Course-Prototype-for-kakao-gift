@@ -128,6 +128,29 @@ assert.equal(store.getGift("g1002").status, "DECLINED_REFUNDED");
 assert.equal(store.getGift("g1002").settlement.type, "REFUND");
 assert.match(store.listNotifications("u5")[0].text, /지우님이 선물을 거절하여 13,500원이 환불되었어요/);
 
+// Seller center (Phase 5): masking, bulk tracking never ships no-ship orders, dev order generator, access log
+const { registerTrackingBulk, validateTracking } = await import(`${js}/services/delivery-service.js`);
+const { generateOrders } = await import(`${js}/core/seed-data.js`);
+assert.equal(fmt.maskAddress("서울특별시 마포구 마포대로 33"), "서울특별시 마포구 ***");
+assert.equal(fmt.maskAddress("경기도 성남시 분당구 판교역로 166"), "경기도 성남시 분당구 ***");
+assert.equal(validateTracking({ courier: "CJ대한통운", trackingNo: "12345678901234" }).ok, false); // 14 digits
+store.resetDemoData();
+const bulk = await registerTrackingBulk([
+  { giftId: "g2002", courier: "한진택배", trackingNo: "512345678901" },
+  { giftId: "g2011", courier: "한진택배", trackingNo: "512345678902" }, // CONVERTED → refused
+  { giftId: "g2003", courier: "없는택배", trackingNo: "512345678903" },
+]);
+assert.deepEqual(bulk.map((r) => r.ok), [true, false, false]);
+assert.equal(store.getGift("g2002").status, "SHIPPED");
+assert.equal(store.getGift("g2011").status, "CONVERTED");
+assert.equal(store.getGift("g2011").delivery.trackingNo, "");
+const generated = generateOrders(200);
+assert.equal(new Set(generated.map((g) => g.orderNo)).size, 200);
+store.importGifts(generated);
+assert.equal(store.listGiftsBy({ sellerId: "s1" }).length >= 213, true);
+store.logAccess({ actor: "s1", action: "PII_VIEW", giftId: "g2001" });
+assert.equal(store.listAccessLog().at(-1).action, "PII_VIEW");
+
 // Reset + persistence
 store.resetDemoData();
 assert.equal(store.getGift("g1001").status, "SENT");

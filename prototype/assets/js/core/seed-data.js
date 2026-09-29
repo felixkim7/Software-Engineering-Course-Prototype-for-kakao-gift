@@ -193,6 +193,20 @@ function buildGift([id, status, buyerId, recipientId, productId, daysAgo, messag
   return gift;
 }
 
+/** Dev data for the seller table (SCR-S01 "주문 200건 생성"): s1 orders spread over statuses and 30 days. */
+export function generateOrders(count, now = new Date()) {
+  const productsById = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
+  const statuses = ["ADDRESS_SUBMITTED", "SHIPPED", "DELIVERED", "OPENED", "ADDRESS_SUBMITTED", "SENT", "CONVERTED", "DELIVERED", "DECLINED_REFUNDED", "SHIPPED"];
+  const people = GIFT_ROWS.filter((r) => r[3].startsWith("c") && r[7]).map((r) => [r[3], r[7]]);
+  const needsAddress = (s) => ["ADDRESS_SUBMITTED", "SHIPPED", "DELIVERED"].includes(s);
+  return Array.from({ length: count }, (_, i) => {
+    const status = statuses[i % statuses.length];
+    const [recipientId, address] = people[i % people.length];
+    const row = [`gd${i + 1}`, status, ["u2", "u3", "u5", "u6"][i % 4], recipientId, ["p07", "p13", "p14", "p15"][i % 4], i % 30, "감사합니다", needsAddress(status) ? address : null];
+    return buildGift(row, 500 + i, now, productsById);
+  });
+}
+
 /** u1's birthday is always 3 days after "now" so the 🎂 D-3 tag shows on demo day. */
 function birthdayInDays(year, days, now) {
   const d = new Date(now.getTime() + days * DAY);
@@ -231,6 +245,7 @@ export function createSeed(now = new Date()) {
     ],
     devFlags: { failNextPayment: false, failNextSettlement: false, failNextMessage: false, showNewBadges: true },
     idempotency: {},
+    auditLog: [],
     session: { currentUserId: "u0" },
     nextSeq: GIFT_ROWS.length + 1,
   };

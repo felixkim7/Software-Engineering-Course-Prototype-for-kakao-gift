@@ -5,7 +5,7 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Current phase
 
-**Phase 5 — Seller center** (next; Phase 4 done 2026-09-29)
+**Phase 6 — Integration, polish, demo readiness** (next; Phase 5 done 2026-09-29)
 
 ## Phase checklist
 
@@ -14,7 +14,7 @@ Keep entries short. Newest notes at the top of each section.
 - [x] Phase 2 — Buyer: checkout, payment, send, history
 - [x] Phase 3 — Recipient: inbox, gift view, delivery receipt
 - [x] Phase 4 — Recipient: decline / convert to cash ★
-- [ ] Phase 5 — Seller center: integrated order + delivery, Excel, tracking upload
+- [x] Phase 5 — Seller center: integrated order + delivery, Excel, tracking upload
 - [ ] Phase 6 — Integration, polish, demo readiness
 
 ## Phase log
@@ -25,6 +25,29 @@ Keep entries short. Newest notes at the top of each section.
 - Acceptance criteria: all passed | exceptions: …
 - Notes: …
 -->
+
+### Phase 5 — Seller center (done 2026-09-29)
+- Built: `seller/index.html` + `pages/seller-center.js` (SCR-S01), `ui/seller-dialogs.js` (SCR-S02 export, SCR-S03 bulk
+  upload), `services/export-service.js` (SheetJS xlsx + CSV/BOM fallback + .xlsx/.csv parser), `registerTrackingBulk()`,
+  `openDialog` / `openDrawer` (shared with the sheet), DataTable `rowClass` / `onRowClick` / pinned 주문번호 column,
+  `maskAddress()`, store `auditLog` / `logAccess()` / `importGifts()`, `generateOrders()`; `placeholder.js` removed.
+- Acceptance criteria (headless Chrome + `node tools/check-core.mjs`, files inspected as zip/XML):
+  - PASS table: 13 s1 orders; tiles 발송 대기 6 · 배송 중 3 · 배송 완료 2 · 발송 불필요 2; tile + status select + 오늘/7일/30일 +
+    search combine (search "강민재" → tiles recount).
+  - PASS masking: table shows 김*우 · 010-****-1111 · 서울특별시 마포구 ***; drawer unmasked with "개인정보 열람 기록됨" and a
+    PII_VIEW log entry; full export only after the acknowledgement (PII_EXPORT logged) — unmasked phone + address verified in
+    both .xlsx and .csv.
+  - PASS files: .xlsx has 주문번호 first, Korean intact, bold header (style with `<b/>`), column widths; CSV starts with the
+    UTF-8 BOM; with jsDelivr blocked the export falls back to CSV + toast.
+  - PASS inline tracking: missing courier / "123" rejected with messages; valid number → SHIPPED.
+  - PASS bulk: demo example file → preview "등록 가능 3건 · 오류 3건" (bad number, unknown order, 발송 불필요) → toast
+    "3건 등록, 3건 오류"; blank template round-trips (reports the missing courier).
+  - PASS CONVERTED / DECLINED: greyed rows, no inputs, bulk + service refuse them, trackingNo stays empty.
+  - PASS cross-role: recipient-addressed g1001 appears as 발송 대기; after registering → recipient 배송 중 · 우체국택배
+    6070123456789, buyer 배송 중; converted/declined gifts show 발송 불필요.
+  - PASS 200 orders (`?dev=1`): 213 rows, search ≈ 15 ms, tile ≈ 13 ms, sort ≈ 12 ms.
+  - PASS no console errors at 1280 px and 1024 px. Phase 1–4 checks re-run without regressions.
+  - NEEDS MANUAL CHECK: open a downloaded .xlsx in Excel / Numbers / Google Sheets once (verified here by reading the file XML).
 
 ### Phase 4 — Recipient decline / convert ★ (done 2026-09-29)
 - Built: `services/decision-service.js` (`decideGift()` = UC-R3 steps 7–9 + 4a with in-flight promise, `processing`
@@ -97,6 +120,11 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Decisions & assumptions
 
+- (Phase 5) SheetJS is loaded as the `xlsx-js-style@1.2.0` build (SheetJS 0.18.5 + cell styles) because the community `xlsx@0.18.5` build can't write the bold header the spec asks for; same `window.XLSX` API, same jsDelivr CDN.
+- (Phase 5) Export cells starting with = + - @ are prefixed with ' (CSV/formula-injection guard); "no option" exports as an empty cell.
+- (Phase 5) Bulk upload uses one courier sync for all rows (`registerTrackingBulk`) so a 10-row upload doesn't take 10× the mock latency. The upload dialog has a small "데모용 작성 예시 받기" file (valid rows + 3 deliberate errors) so validation can be shown live without editing Excel.
+- (Phase 5) Seller detail drawer and full-PII export write to `state.auditLog` (accountability requirement). Seller timeline merges SENT/OPENED (both "배송지 입력 대기"). Store VERSION 7.
+- (Phase 5) Global `[hidden] { display: none !important }` in base.css — fixes the export acknowledgement row and the mobile ↑ button, which component `display` rules were un-hiding.
 - (Phase 4) The UC-R3 settlement logic lives in `services/decision-service.js` (not in the page) so the rules are shared and testable in Node. The `processing` lock stores a timestamp and expires after 30 s so a closed tab can't leave a gift stuck.
 - (Phase 4) SCR-R04 options are stacked at phone width (side-by-side from 600 px+). A small 3-step stepper (방법 선택 → 확인 → 완료) was added for the same progress cue as the buyer flow. Convert confirm uses the app's yellow CTA; decline confirm uses the danger style.
 - (Phase 4) Seed adds two blocked demo gifts for u1: g1004 (배스킨라빈스, sent 35 days ago → 처리 기한이 지났어요) and g1005 (아빠 → 정관장, not convertible). Store VERSION 6.

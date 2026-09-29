@@ -52,12 +52,23 @@ export function confirmModal({ title = "", message, confirmText = COMMON.yes, ca
   });
 }
 
-/** Bottom sheet with handle. `content` is an HTML string. Returns { el, close }; onClose runs once. */
-export function openSheet({ label, content, onClose = () => {} }) {
+const LAYERS = {
+  sheet: { overlay: "overlay--bottom", panel: "sheet", extra: '<span class="sheet__handle" aria-hidden="true"></span>' },
+  dialog: { overlay: "overlay--center", panel: "panel", extra: "" },
+  drawer: { overlay: "overlay--right", panel: "drawer", extra: "" },
+};
+
+/**
+ * kind "sheet" (mobile bottom sheet with handle) | "dialog" (centered panel) | "drawer" (right side, desktop).
+ * `content` is an HTML string; [data-close] / [data-sheet-close] inside it close the layer.
+ * Focus is trapped, ESC and a backdrop click close it. Returns { el, close }; onClose runs once.
+ */
+function openLayer(kind, { label, content, className = "", onClose = () => {} }) {
+  const cfg = LAYERS[kind];
   const layer = document.createElement("div");
-  layer.className = "overlay overlay--bottom";
-  layer.innerHTML = `<section class="sheet" role="dialog" aria-modal="true" aria-label="${escapeHtml(label)}">
-    <span class="sheet__handle" aria-hidden="true"></span>${content}</section>`;
+  layer.className = `overlay ${cfg.overlay}`;
+  layer.innerHTML = `<section class="${cfg.panel} ${className}" role="dialog" aria-modal="true" aria-label="${escapeHtml(label)}" tabindex="-1">
+    ${cfg.extra}${content}</section>`;
   let closed = false;
   const close = () => {
     if (closed) return;
@@ -69,12 +80,17 @@ export function openSheet({ label, content, onClose = () => {} }) {
   };
   const release = trapFocus(layer, close);
   layer.addEventListener("click", (e) => {
-    if (e.target === layer || e.target.closest("[data-sheet-close]")) close();
+    if (e.target === layer || e.target.closest("[data-sheet-close], [data-close]")) close();
   });
   overlayRoot().append(layer);
-  (layer.querySelector(FOCUSABLE) ?? layer.querySelector(".sheet")).focus();
-  return { el: layer.querySelector(".sheet"), close };
+  const panel = layer.querySelector(`.${cfg.panel}`);
+  (panel.querySelector(FOCUSABLE) ?? panel).focus();
+  return { el: panel, close };
 }
+
+export const openSheet = (options) => openLayer("sheet", options);
+export const openDialog = (options) => openLayer("dialog", options);
+export const openDrawer = (options) => openLayer("drawer", options);
 
 // ---------- toast ----------
 export function ensureToastRegion() {

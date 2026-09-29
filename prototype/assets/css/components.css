@@ -12,6 +12,7 @@
 .btn--danger { background: var(--color-danger); color: var(--color-on-dark); }
 .btn--outline { background: var(--color-surface); border: 1px solid var(--color-line-strong); color: var(--color-ink); }
 .btn--small { height: var(--btn-h-s); border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-surface); font-size: var(--fs-15); }
+.btn--small.btn--dark { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-on-dark); }
 .btn--block { width: 100%; }
 .btn--grow { flex: 1; }
 .btn:disabled { opacity: .4; }
