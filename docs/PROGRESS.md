@@ -5,14 +5,14 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Current phase
 
-**Phase 3 — Recipient receive** (next; Phase 2 done 2026-09-29)
+**Phase 4 — Recipient decline / convert ★** (next; Phase 3 done 2026-09-29)
 
 ## Phase checklist
 
 - [x] Phase 0 — Foundation (scaffold, design system, store, mock services, demo hub)
 - [x] Phase 1 — Buyer: recipient selection & segmented recommendation
 - [x] Phase 2 — Buyer: checkout, payment, send, history
-- [ ] Phase 3 — Recipient: inbox, gift view, delivery receipt
+- [x] Phase 3 — Recipient: inbox, gift view, delivery receipt
 - [ ] Phase 4 — Recipient: decline / convert to cash ★
 - [ ] Phase 5 — Seller center: integrated order + delivery, Excel, tracking upload
 - [ ] Phase 6 — Integration, polish, demo readiness
@@ -25,6 +25,19 @@ Keep entries short. Newest notes at the top of each section.
 - Acceptance criteria: all passed | exceptions: …
 - Notes: …
 -->
+
+### Phase 3 — Recipient receive (done 2026-09-29)
+- Built: `recipient/index.html` + `pages/recipient-inbox.js` (SCR-R01), `recipient/gift.html` + `pages/recipient-gift.js`
+  (SCR-R02), `recipient/receive.html` + `pages/recipient-receive.js` (SCR-R03), `ui/recipient.js` (gift bubble, deadline
+  chip, barcode, delivery timeline), `css/recipient.css`, `store.useRecipientSession()`, placeholder `recipient/decline.html`
+  (Phase 4). Shared page styles (info rows, timeline, form fields, thumbs) moved from buyer.css to components.css.
+- Acceptance criteria: all passed (headless Chrome + `node tools/check-core.mjs`): inbox tabs 사용 가능 2 / 배송 0 / 완료 1
+  with bubble + NEW dot on the SENT gift and D-30 / D-2 (warning) chips; a gift bought in the buyer flow appears in the
+  inbox; opening g1001 SENT → OPENED and the buyer history shows "수령자 확인"; empty submit shows 4 inline errors, phone
+  auto-formats, 주소 검색 sheet fills zip + address, 최근 배송지 fills every field, confirm → ADDRESS_SUBMITTED with note
+  "배송지 입력 완료", then the decline entry is replaced by the muted reason; option step blocks 다음 until chosen;
+  `?as=u2` on u1's gift shows "본인에게 온 선물만 확인할 수 있어요." with no gift data rendered; 390 px + frame OK; no
+  console errors. Phase 1–2 checks re-run: no regressions.
 
 ### Phase 2 — Buyer checkout (done 2026-09-29)
 - Built: `buyer/checkout.html` + `pages/buyer-checkout.js` (SCR-B04, layout per 164646), `buyer/complete.html` +
@@ -65,6 +78,12 @@ Keep entries short. Newest notes at the top of each section.
 
 ## Decisions & assumptions
 
+- (Phase 3) No R00–R03 reference screenshots exist → recipient screens are built only from matched components/tokens; no fake chat room (spec builds it only if the R00 screenshot exists).
+- (Phase 3) Recipient identity: `?as=` switches the viewing recipient and is remembered in `session.recipientId`; the hub's 수령자 card links to `recipient/?as=u1`.
+- (Phase 3) Inbox tabs: 사용 가능 = SENT/OPENED, 배송 = ADDRESS_SUBMITTED/SHIPPED, 완료 = DELIVERED/USED/CONVERTED/DECLINED_REFUNDED (tab labels show counts).
+- (Phase 3) "최근 배송지" = the recipient's most recent other gift with an address (u1 → g1003); a sample address is the fallback. The confirm dialog states that decline/convert is no longer possible after entering an address (UC-R3 precondition).
+- (Phase 3) Vouchers: validity = 93 days from sending; 사용하기 opens a barcode sheet with an optional "사용 완료로 표시" (→ USED). Barcode is drawn from the order number.
+- (Phase 3) Seed: the 투썸 voucher (g1002) was sent 28 days ago so its deadline chip shows D-2 in the warning colour; seeded cards pick a theme from the message wording. Store VERSION 5.
 - (Phase 2) Message card themes 생일/감사/축하/응원/기본 use the 5 Kakao theme thumbnails from 164646; 축하 is the real blue card with its full illustration. The theme follows the 상황 chip (쾌유 → 응원, 그냥 → 기본); switching themes replaces the default text until the buyer types.
 - (Phase 2) Payment idempotency key = one per checkout visit (a retry after failure reuses it); `createGift` is idempotent per `paymentTxId`; success uses `location.replace` so Back never reopens a paid checkout.
 - (Phase 2) Checkout keeps the real 선물 배송지 입력 section for delivery items with only "선물 받는 친구가 입력할 거예요" enabled (recipient enters the address in Phase 3). 쇼핑포인트 / 현금영수증 / card list from 164646 are out of scope.

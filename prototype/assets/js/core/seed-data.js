@@ -127,7 +127,7 @@ const PATHS = {
 const GIFT_ROWS = [
   // received by the demo recipient u1
   ["g1001", "SENT", "u0", "u1", "p07", 0, "생일 축하해! 🎉 맛있게 먹어~", null],
-  ["g1002", "OPENED", "u5", "u1", "p20", 2, "시험 끝난 기념! 커피 한 잔 해 ☕", null],
+  ["g1002", "OPENED", "u5", "u1", "p20", 28, "시험 끝난 기념! 커피 한 잔 해 ☕", null],
   ["g1003", "DELIVERED", "u6", "u1", "p06", 6, "늘 고마워 :)", ["김지우", "01234", "서울특별시 마포구 와우산로 94", "302호"]],
   // seller s1 (하겐다즈 공식스토어) orders
   ["g2001", "ADDRESS_SUBMITTED", "u2", "c1", "p07", 1, "승진 축하드려요!", ["이도현", "04157", "서울특별시 마포구 마포대로 33", "1203호"]],
@@ -152,6 +152,10 @@ export function orderNo(date, seq) {
   return `${ymd}-${String(seq).padStart(6, "0")}`;
 }
 
+// Card theme picked from the seeded message wording (the buyer chose it at checkout)
+const themeFor = (message) =>
+  /생일/.test(message) ? "birthday" : /축하/.test(message) ? "congrats" : /고마|감사/.test(message) ? "thanks" : /힘내|응원|기념|고생/.test(message) ? "cheer" : "basic";
+
 function buildGift([id, status, buyerId, recipientId, productId, daysAgo, message, address], seq, now, productsById) {
   const product = productsById[productId];
   const created = new Date(now.getTime() - daysAgo * DAY - 3 * 60 * 60 * 1000);
@@ -165,7 +169,7 @@ function buildGift([id, status, buyerId, recipientId, productId, daysAgo, messag
   const gift = {
     id, orderNo: orderNo(created, 120 + seq), buyerId, recipientId, productId,
     optionId: product.options[0]?.id ?? null, quantity: 1, amount: product.price, message,
-    cardTheme: "birthday", paymentMethod: "card", status,
+    cardTheme: themeFor(message), paymentMethod: "card", status,
     createdAt: created.toISOString(), decisionDeadline: deadline.toISOString(),
     delivery: null,
     history: steps.map((s, i) => ({ at: at(i), status: s, note: HISTORY_NOTES[s] })),

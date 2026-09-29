@@ -82,6 +82,13 @@ store.updateGift(g1.id, { messageFailed: true });
 assert.equal((await resendGiftMessage({ giftId: g1.id })).ok, true);
 assert.equal(store.getGift(g1.id).messageFailed, false);
 
+// Recipient session (Phase 3): ?as= switches and is remembered; unknown ids are ignored
+assert.equal(store.useRecipientSession("u2"), "u2");
+assert.equal(store.useRecipientSession(null), "u2");
+assert.equal(store.useRecipientSession("nobody"), "u2");
+assert.equal(store.getCurrentUserId(), "u2");
+assert.equal(store.useRecipientSession("u1"), "u1");
+
 // Delivery: validation + ship
 assert.equal((await registerTracking({ giftId: "g2001", courier: "CJ대한통운", trackingNo: "12ab" })).code, "INVALID_TRACKING_NO");
 assert.equal((await registerTracking({ giftId: "g2001", courier: "CJ대한통운", trackingNo: "681234567890" })).ok, true);

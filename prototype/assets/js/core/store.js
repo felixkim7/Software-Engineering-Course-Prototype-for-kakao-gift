@@ -3,7 +3,7 @@
 import { createSeed, orderNo } from "./seed-data.js";
 
 const KEY = "giftProto.v1";
-const VERSION = 3; // bump whenever seed-data changes so browsers reseed
+const VERSION = 5; // bump whenever seed-data changes so browsers reseed
 const CHANGE_EVENT = "store:change";
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -77,6 +77,20 @@ export function listNotifications(userId) {
 }
 
 // ---------- mutators ----------
+/**
+ * Recipient pages act as u1 by default. `?as=u2` switches the viewing recipient and is remembered
+ * for the other recipient pages (buyer pages set u0 separately). Returns the recipient's id.
+ */
+export function useRecipientSession(asParam) {
+  const wanted = asParam && getUser(asParam) ? asParam : state.session.recipientId ?? "u1";
+  if (state.session.recipientId !== wanted || state.session.currentUserId !== wanted) {
+    state.session.recipientId = wanted;
+    state.session.currentUserId = wanted;
+    save({ type: "session", userId: wanted });
+  }
+  return wanted;
+}
+
 export function setCurrentUser(userId) {
   state.session.currentUserId = userId;
   save({ type: "session", userId });

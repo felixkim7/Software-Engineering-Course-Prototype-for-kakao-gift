@@ -20,7 +20,7 @@ const S = {
 const ROLES = [
   { name: "구매자", device: "모바일", href: "buyer/", userId: "u0", image: "kakao-ryan-card",
     ucs: [["UC-B1", "수령자 결정"], ["UC-B2", "선물 검색·구매 (세분화 추천)"], ["UC-B3", "선물 구매 내역 조회"]] },
-  { name: "수령자", device: "모바일", href: "recipient/", userId: "u1", image: "msg-theme-2",
+  { name: "수령자", device: "모바일", href: "recipient/?as=u1", userId: "u1", image: "msg-theme-2",
     ucs: [["UC-R1", "선물 확인"], ["UC-R2", "배송상품 수령 (옵션·배송지)"], ["UC-R3", "선물 거절 · 금액 전환 ★"]] },
   { name: "판매자 센터", device: "데스크톱", href: "seller/", userId: null, image: "list-exchange",
     ucs: [["UC-S1", "주문·배송 정보 통합 조회 · 엑셀"], ["UC-S2", "발송 처리 · 송장 일괄 업로드"]] },

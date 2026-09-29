@@ -1,0 +1,65 @@
+/* Recipient screens (SCR-R01~R03). No reference screenshot exists — built from the app's matched components and tokens. */
+
+/* ---------- inbox SCR-R01 ---------- */
+.inbox-owner { padding: var(--sp-4) var(--page-x) var(--sp-2); font-size: var(--fs-14); color: var(--color-ink-3); }
+.inbox-list { display: grid; align-content: start; gap: var(--sp-3); min-height: 70%; padding: var(--sp-4) var(--page-x) 48px; background: var(--color-bg-grey); }
+.inbox-card { display: grid; gap: var(--sp-3); padding: var(--sp-4); border-radius: var(--radius-l); background: var(--color-surface); }
+.inbox-card__row { display: flex; gap: var(--sp-3); }
+.inbox-card__info { display: grid; align-content: start; gap: 2px; min-width: 0; }
+.inbox-card__brand { font-size: var(--fs-14); color: var(--color-ink-3); }
+.inbox-card__name { font-size: var(--fs-15); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.inbox-card__from { font-size: var(--fs-13); color: var(--color-ink-3); }
+.inbox-card__foot { display: flex; align-items: center; gap: 6px; }
+
+/* KakaoTalk-style gift bubble (yellow header like the chat-room gift message) */
+.gift-bubble { display: grid; overflow: hidden; border: 1px solid var(--color-line); border-radius: var(--radius-l); }
+.gift-bubble__head { display: flex; align-items: center; gap: 6px; padding: var(--sp-2) var(--sp-3); background: var(--color-accent-strong); font-size: var(--fs-14); font-weight: var(--fw-bold); }
+.new-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-sale-strong); }
+.gift-bubble__body { padding: 10px var(--sp-3); overflow: hidden; font-size: var(--fs-14); color: var(--color-ink-2); white-space: nowrap; text-overflow: ellipsis; }
+
+.deadline-chip { display: inline-grid; place-items: center; height: 20px; padding: 0 var(--sp-2); border: 1px solid var(--color-line-strong); border-radius: var(--radius-pill); font-size: var(--fs-11); font-weight: var(--fw-bold); color: var(--color-ink-3); }
+.deadline-chip.is-soon { border-color: var(--color-warning); background: var(--color-warning-bg); color: var(--color-warning); }
+.deadline-chip.is-expired { color: var(--color-ink-4); }
+
+/* ---------- gift view SCR-R02 ---------- */
+.gift-from { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-4) var(--page-x); font-size: var(--fs-16); }
+.gift-from small { display: block; font-size: var(--fs-12); color: var(--color-ink-3); }
+.gift-product { display: flex; gap: var(--sp-3); }
+.gift-product__brand { font-size: var(--fs-14); color: var(--color-ink-3); }
+.gift-product__name { font-size: var(--fs-17); font-weight: var(--fw-regular); line-height: var(--lh-body); }
+.gift-product__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--sp-2); }
+.voucher { padding-top: 0; text-align: center; }
+.voucher__validity { margin-top: var(--sp-2); font-size: var(--fs-14); color: var(--color-ink-3); text-align: center; }
+.voucher.is-used .barcode { opacity: .3; }
+.barcode { margin: 0; padding: var(--sp-4); border: 1px solid var(--color-line); border-radius: var(--radius-m); }
+.barcode svg { display: block; width: 100%; height: 64px; color: var(--color-ink); }
+.barcode figcaption { margin-top: var(--sp-2); font-size: var(--fs-15); letter-spacing: 2px; }
+.voucher--big .barcode svg { height: 96px; }
+.decide-entry { padding: var(--sp-5) var(--page-x) var(--sp-8); text-align: center; }
+.text-btn { font-size: var(--fs-15); color: var(--color-ink-3); text-decoration: underline; text-underline-offset: 3px; }
+.decide-entry .badge-new { margin-left: var(--sp-1); }
+.decide-entry__hint { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: var(--sp-2); font-size: var(--fs-12); color: var(--color-ink-3); }
+.decide-entry__reason { font-size: var(--fs-13); color: var(--color-ink-3); }
+.timeline li.is-done::before { background: var(--color-ink); }
+.timeline li.is-pending { color: var(--color-ink-4); }
+.timeline li.is-pending::before { background: var(--color-line-strong); }
+.timeline li small { display: block; font-size: var(--fs-12); color: var(--color-ink-3); }
+
+/* ---------- option & address SCR-R03 ---------- */
+.option-list { display: grid; gap: var(--sp-2); }
+.option-radio { display: flex; align-items: center; gap: var(--sp-3); padding: 14px var(--sp-4); border: 1px solid var(--color-line); border-radius: var(--radius-m); font-size: var(--fs-16); cursor: pointer; }
+.option-radio:has(:checked) { border-color: var(--color-ink); }
+.addr-form { padding-bottom: var(--sp-8); }
+.recent-btn { height: 44px; }
+.field { margin-top: var(--sp-4); }
+.field__label { display: block; margin-bottom: 6px; font-size: var(--fs-14); font-weight: var(--fw-bold); }
+.field .input + .input { margin-top: var(--sp-2); }
+.field__row { display: flex; gap: var(--sp-2); }
+.field__row .input { flex: 1; }
+.field__row .btn { flex: none; height: 40px; }
+.input:read-only { background: var(--color-bg-soft); }
+.input[aria-invalid="true"] { border-color: var(--color-danger); }
+.field-error { margin-top: var(--sp-1); font-size: var(--fs-13); color: var(--color-danger); }
+.addr-results { margin-top: var(--sp-3); }
+.addr-result { display: block; width: 100%; padding: var(--sp-3) 0; border-bottom: 1px solid var(--color-line); text-align: left; font-size: var(--fs-15); }
+.addr-result b { display: block; font-size: var(--fs-12); color: var(--color-blue); }
